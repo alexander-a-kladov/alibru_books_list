@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>Alib book editor</title>
+<link rel="stylesheet" href="style.css"/>
+<script defer src="js.js"></script>
+</head>
+<body>
+<input type="button" id="new-line" onclick="addLine()" value="Добавить строку"></input>
+<table id="books" class="editable">
+<!-- HEADER -->
+<thead>
+<tr>
+<th>Рубрика</th>
+<th>Автор</th>
+<th>Название</th>
+<th>Второе название</th>
+<th>Место издания</th>
+<th>Издательство</th>
+<th>Год</th>
+<th>Страниц</th>
+<th>Тип переплета</th>
+<th>Формат книги</th>
+<th>Цена</th>
+<th>Содержание</th>
+<th>Состояние</th>
+<th>Дата размещения (ДД.ММ.ГГГГ)</th>
+<th>Описание до 3-х картинок</th>
+<th>Учет. код продавца</th>
+<th>ISBN</th>
+</tr>
+</thead>
+<!-- ДАННЫЕ -->
+<tbody id="books-body">
+</tbody>
+</body>
+<input type="button" id="save" onclick="saveBooks()" value="Сохранить список"></input>
+<input type="button" id="load" onclick="loadBooks()" value="Загрузить список"></input>
+<p><textarea name="book list" id="book-list" placeholder="Скопируйте сюда список книг"></textarea></p>
+</html> 
