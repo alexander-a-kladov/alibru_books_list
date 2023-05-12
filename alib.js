@@ -44,6 +44,37 @@ editable.selected = null;
 }}
 };
 
+function readInputData() {
+  let rubrics_file = null;
+  fetch("rubrics.txt")
+  .then(response => response.text())
+  .then(text => rubrics_file = text)
+  .catch(console.log("Error file read"));
+    console.log(rubrics_file);
+  if (rubrics_file) {
+    lines = rubrics_file.split('\n');
+    rubrics_body = document.getElementById("rubrics-body")
+    console.log(lines.length)
+    for (let i = 0; i < lines.length; i++) {
+        console.log(lines[i]);
+        if (lines[i].length > 0) {
+            let line = document.createElement("tr");
+            let td = document.createElement("td");
+            td.innerHTML = lines[i].split("\t")[0];
+            line.appendChild(td);
+            td = document.createElement("td");
+            td.innerHTML = lines[i].split("\t")[1];
+            line.appendChild(td);
+            rubrics_body.appendChild(line);
+        }
+    }
+}
+}
+
+function  selectRubrics() {
+    document.getElementById("rubrics-id").innerHTML = event.target.innerHTML;  
+}
+
 function addLine(list = null) {
   let line = document.createElement("tr");
   for (let i=0; i<cols;i++) { 
@@ -53,7 +84,11 @@ function addLine(list = null) {
   	} else {
   		td.innerHTML = "abc";
   	}
-  	td.ondblclick = () => { editable.edit(td); };
+    if (i==0) {
+        td.classList.add()
+    } else {
+  	    td.ondblclick = () => { editable.edit(td); };
+    }
   	line.appendChild(td);
   }
 
@@ -97,4 +132,48 @@ function loadBooks() {
    });
 }
 
+function getBookByISBN() {
+    isbn = document.getElementById("isbn").value;
+    let rest_request="https://www.googleapis.com/books/v1/volumes?q=isbn:"+isbn;
+    fetch(rest_request)
+        .then(response => {
+        // indicates whether the response is successful (status code 200-299) or not
+        if (!response.ok) {
+            throw new Error(`Request failed with status ${reponse.status}`)
+        }
+        return response.json()
+        })
+        .then(data => {
+            for (let i = 0; i<data.totalItems; i++) {
+                volume = data.items[i].volumeInfo;
+                let obj = { name:volume.title ?? "",
+                        authors:volume.authors ?? "",
+                        publisher:volume.publisher ?? "",
+                        date:volume.publishedDate ?? "",
+                        description:volume.description.slice(0,256) ?? "",
+                        pages:volume.pageCount ?? ""};
+                new_date = new Date();
+                new_date = +new_date.getDate()+'.'+new_date.getMonth()+'.'+new_date.getFullYear();
+                addLine(['', obj.authors, obj.name, '', '', obj.publisher, obj.date, obj.pages, '', '', '', obj.description, '', new_date, '', '', isbn]);
+            }
+        })
+        .catch(error => console.log(error))
+}
 
+function listShow() {
+  document.getElementById("dropDown").classList.toggle("show");
+}
+
+// Закройте выпадающее меню, если пользователь щелкает за его пределами
+window.onclick = function(event) {
+  if (!event.target.matches('.dropbtn')) {
+    var dropdowns = document.getElementsByClassName("dropdown-content");
+    var i;
+    for (i = 0; i < dropdowns.length; i++) {
+      var openDropdown = dropdowns[i];
+      if (openDropdown.classList.contains('show')) {
+        openDropdown.classList.remove('show');
+      }
+    }
+  }
+}
