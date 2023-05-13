@@ -71,10 +71,6 @@ function readInputData() {
 }
 }
 
-function  selectRubrics() {
-    document.getElementById("rubrics-id").innerHTML = event.target.innerHTML;  
-}
-
 function addLine(list = null) {
   let line = document.createElement("tr");
   for (let i=0; i<cols;i++) { 
@@ -132,6 +128,10 @@ function loadBooks() {
    });
 }
 
+function getListValue(list_id, default_v) {
+    return ((document.getElementById(list_id).innerHTML==default_v)?"":document.getElementById(list_id).innerHTML)
+}
+
 function getBookByISBN() {
     isbn = document.getElementById("isbn").value;
     let rest_request="https://www.googleapis.com/books/v1/volumes?q=isbn:"+isbn;
@@ -146,22 +146,31 @@ function getBookByISBN() {
         .then(data => {
             for (let i = 0; i<data.totalItems; i++) {
                 volume = data.items[i].volumeInfo;
-                let obj = { name:volume.title ?? "",
+                let obj = {
+                        rubric:getListValue("rubrics-id","Рубрика"), 
+                        name:volume.title ?? "",
                         authors:volume.authors ?? "",
                         publisher:volume.publisher ?? "",
                         date:volume.publishedDate ?? "",
                         description:volume.description.slice(0,256) ?? "",
+                        binding:getListValue("bindings-id","Переплет"),
+                        condition:getListValue("conditions-id","Состояние"),
+                        format:getListValue("formats-id","Формат"),
                         pages:volume.pageCount ?? ""};
                 new_date = new Date();
                 new_date = +new_date.getDate()+'.'+new_date.getMonth()+'.'+new_date.getFullYear();
-                addLine(['', obj.authors, obj.name, '', '', obj.publisher, obj.date, obj.pages, '', '', '', obj.description, '', new_date, '', '', isbn]);
+                addLine([obj.rubric, obj.authors, obj.name, '', '', obj.publisher, obj.date, obj.pages, obj.binding, obj.format, '', obj.description, obj.condition, new_date, '', '', isbn]);
             }
         })
         .catch(error => console.log(error))
 }
 
-function listShow() {
-  document.getElementById("dropDown").classList.toggle("show");
+function listShow(list_id) {
+  document.getElementById(list_id).classList.toggle("show");
+}
+
+function  selectList(list_id) {
+    document.getElementById(list_id).innerHTML = event.target.innerHTML;  
 }
 
 // Закройте выпадающее меню, если пользователь щелкает за его пределами
