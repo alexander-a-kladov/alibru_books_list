@@ -5,15 +5,25 @@
 <title>Alib book editor</title>
 <link rel="stylesheet" href="style.css"/>
 <script defer src="alib.js"></script>
+</head>
+<body>
 <details>
 <summary>Заголовок сайта Alib</summary>
 <embed width=1900px height=1000px src="fbs_header.txt">
 </details>
-</head>
-<body>
-<input type="button" id="new-line" onclick="addLine()" value="Добавить строку"></input>
+<div>Выберите файл c ISBN книг</div>
+<input type="file" id="isbn-file-id" onchange="readISBNFile(this.files)">
+<div id="isbn-count"></div>
 <p><input type="button" id="get-book-by-isbn" onclick="getBookByISBN()" value="Данные по книге">
-<input type="text" id="isbn" size="40">
+<input type="text" id="isbn-id" size="40">
+</p>
+<p>
+<input type="button" onclick="findOnAlib()" value="Найти на Alib">
+</p>
+<p>
+<input type="text" id="name-id" size="25"><input type="text" id="authors-id" size="25">
+<input type="text" id="publisher-id" size="25"><input type="text" id="date-id" size="25">
+<input type="text" id="pages-id" size="25"><input type="text" id="description-id" size="25">
 </p>
 <p>
 <div class="dropdown">
@@ -69,7 +79,8 @@
   </table>
   </div>
 </div>
-</p> 
+</p>
+<p><input type="button" id="new-line" onclick="addFilledLine()" value="Добавить строку"></input></p>
 <table id="books" class="editable">
 <!-- HEADER -->
 <thead>
@@ -96,8 +107,9 @@
 <!-- ДАННЫЕ -->
 <tbody id="books-body">
 </tbody>
-</body>
+</table>
 <input type="button" id="save" onclick="saveBooks()" value="Сохранить список"></input>
 <input type="button" id="load" onclick="loadBooks()" value="Загрузить список"></input>
 <p><textarea name="book list" id="book-list" placeholder="Скопируйте сюда список книг"></textarea></p>
+</body>
 </html> 

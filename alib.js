@@ -1,6 +1,8 @@
 // ИНИЦИАЛИЗАЦИЯ - ДВОЙНОЙ ЩЕЛЧОК ДЛЯ РЕДАКТИРОВАНИЯ ЯЧЕЙКИ
-
 const cols = 17
+isbn_list = []
+isbn_index = 0
+alib_win = null;
 window.addEventListener("DOMContentLoaded", () => {
 for (let cell of document.querySelectorAll("#books td")) {
 cell.ondblclick = () => { editable.edit(cell); };
@@ -71,6 +73,24 @@ function readInputData() {
 }
 }
 
+function addFilledLine() {
+     let obj = {
+                rubric:getListValue("rubrics-id","Рубрика"),
+                authors:document.getElementById('authors-id').value,
+                name:document.getElementById('name-id').value,
+                publisher:document.getElementById('publisher-id').value,
+                date:document.getElementById('date-id').value,
+                pages:document.getElementById('pages-id').value,
+                description:document.getElementById('description-id').value,
+                binding:getListValue("bindings-id","Переплет"),
+                condition:getListValue("conditions-id","Состояние"),
+                format:getListValue("formats-id","Формат"),
+                isbn:document.getElementById('isbn-id').value};
+                new_date = new Date();
+                new_date = +new_date.getDate()+'.'+new_date.getMonth()+'.'+new_date.getFullYear();
+                addLine([obj.rubric, obj.authors, obj.name, '', '', obj.publisher, obj.date, obj.pages, obj.binding, obj.format, '', obj.description, obj.condition, new_date, '', '', isbn]);
+}
+
 function addLine(list = null) {
   let line = document.createElement("tr");
   for (let i=0; i<cols;i++) { 
@@ -80,11 +100,7 @@ function addLine(list = null) {
   	} else {
   		td.innerHTML = "abc";
   	}
-    if (i==0) {
-        td.classList.add()
-    } else {
-  	    td.ondblclick = () => { editable.edit(td); };
-    }
+  	td.ondblclick = () => { editable.edit(td); };
   	line.appendChild(td);
   }
 
@@ -132,8 +148,47 @@ function getListValue(list_id, default_v) {
     return ((document.getElementById(list_id).innerHTML==default_v)?"":document.getElementById(list_id).innerHTML)
 }
 
+function readISBNFile(files) {
+  let file = files[0];
+
+  let reader = new FileReader();
+
+  reader.readAsText(file);
+
+  reader.onload = function() {
+    isbns = reader.result.split('\n');
+    for (let i=0;i<isbns.length;i++) {
+        if (isbns[i].length) {
+            isbn_list.push(isbns[i]);
+        }
+    }
+    isbn_index = 0;
+    document.getElementById('isbn-count').innerHTML = `Найдено ${isbn_list.length} книг`;
+  };
+
+  reader.onerror = function() {
+    console.log(reader.error);
+  };
+}
+
+function findOnAlib() {
+    isbn = document.getElementById("isbn-id").value;
+     if (alib_win) alib_win.close();
+    alib_win = window.open(`https://www.alib.ru/findp.php4?isbnp=${isbn}`);
+}
+
 function getBookByISBN() {
-    isbn = document.getElementById("isbn").value;
+    if (isbn_list.length) {
+        if (isbn_index<isbn_list.length) {
+            document.getElementById("isbn-id").value = isbn_list[isbn_index];
+            isbn_index += 1;
+        } else {
+            document.getElementById("isbn-count").innerHTML = 'Все книги из файла обработаны';
+            isbn_list = []
+        }
+    }
+    isbn = document.getElementById("isbn-id").value;
+    if (!isbn.length) return;
     let rest_request="https://www.googleapis.com/books/v1/volumes?q=isbn:"+isbn;
     fetch(rest_request)
         .then(response => {
@@ -146,23 +201,15 @@ function getBookByISBN() {
         .then(data => {
             for (let i = 0; i<data.totalItems; i++) {
                 volume = data.items[i].volumeInfo;
-                let obj = {
-                        rubric:getListValue("rubrics-id","Рубрика"), 
-                        name:volume.title ?? "",
-                        authors:volume.authors ?? "",
-                        publisher:volume.publisher ?? "",
-                        date:volume.publishedDate ?? "",
-                        description:volume.description.slice(0,256) ?? "",
-                        binding:getListValue("bindings-id","Переплет"),
-                        condition:getListValue("conditions-id","Состояние"),
-                        format:getListValue("formats-id","Формат"),
-                        pages:volume.pageCount ?? ""};
-                new_date = new Date();
-                new_date = +new_date.getDate()+'.'+new_date.getMonth()+'.'+new_date.getFullYear();
-                addLine([obj.rubric, obj.authors, obj.name, '', '', obj.publisher, obj.date, obj.pages, obj.binding, obj.format, '', obj.description, obj.condition, new_date, '', '', isbn]);
+                document.getElementById('name-id').value = volume.title ?? "";
+                document.getElementById('authors-id').value = volume.authors ?? "";
+                document.getElementById('publisher-id').value = volume.publisher ?? "";
+                document.getElementById('date-id').value = volume.publishedDate ?? "";
+                document.getElementById('description-id').value = volume.description.slice(0,256) ?? "";
+                document.getElementById('pages-id').value = volume.pageCount ?? "";
             }
         })
-        .catch(error => console.log(error))
+        .catch(error => console.log(error));
 }
 
 function listShow(list_id) {
