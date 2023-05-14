@@ -123,25 +123,27 @@ function saveBooks() {
    	    }
    	}
    }
-   navigator.clipboard.writeText(books)
-                .then(() => {
-                console.log('Copy to clipboard');
-                alert("Скопировано в буфер обмена")
-                    })
-                .catch(err => {
-                console.log('Something went wrong', err);
-                });
+    let file = new File([books], "test_save.txt", {type: "text/plain"});
+    let link = document.createElement('a');
+    link.download = file.name;
+
+    link.href = URL.createObjectURL(file);
+    link.click();
+    URL.revokeObjectURL(link.href);
 }
 
-function loadBooks() {
-   list = document.getElementById("book-list").value;
-   console.log(list);
-   arr = list.split('\n');
-   arr.forEach(function(item) {
-   	if (item.length>0) {
-   		addLine(item.split('\t'));
-   	}
-   });
+function loadBooks(files) {
+   let file = files[0];
+   let reader = new FileReader();
+   reader.readAsText(file);
+   reader.onload = function() {
+        arr = reader.result.split('\n');
+        arr.forEach(function(item) {
+        if (item.length>0) {
+            addLine(item.split('\t'));
+        }
+        });
+   }
 }
 
 function getListValue(list_id, default_v) {
