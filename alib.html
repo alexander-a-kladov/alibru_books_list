@@ -19,102 +19,15 @@
 </p>
 <p>
 <input type="button" onclick="findOnAlib()" value="Найти на Alib">
+<input type="button" onclick="findOnChitaiGorod()" value="Найти на Читай Городе">
+<input type="button" onclick="findOnOzon()" value="Найти на Ozon">
 </p>
 <p>
 <input type="text" id="name-id" size="25"><input type="text" id="authors-id" size="25">
 <input type="text" id="publisher-id" size="25"><input type="text" id="date-id" size="25">
 <input type="text" id="pages-id" size="25"><input type="text" id="description-id" size="25">
 </p>
-<p>
-<div class="dropdown">
-  <button onclick='listShow("dropRubrics")' class="dropbtn" id="rubrics-id">Рубрика</button>
-  <div id="dropRubrics" class="dropdown-content">
-  	<table id="rubrics">
-    <tbody id="rubrics-body">
-<tr><td onclick="selectList('rubrics-id')">t2mv</td><td>2-я Мировая война (1939-1945 гг.)</td></tr>
-<tr><td onclick="selectList('rubrics-id')">tetnos</td><td>Антропология, этнография, мифология, фольклор</td></tr>	
-<tr><td onclick="selectList('rubrics-id')">tfinans</td><td>Банковское дело, Финансы, Бухгалтерия</td></tr>
-    </tbody>
-	</table>
-  </div>
-</div>
-<div class="dropdown">
-  <button onclick='listShow("dropBindings")' class="dropbtn" id="bindings-id">Переплет</button>
-  <div id="dropBindings" class="dropdown-content">
-    <table id="bindings">
-    <tbody id="bindings-body">
-<tr><td onclick="selectList('bindings-id')">Переплет</td></tr>
-<tr><td onclick="selectList('bindings-id')">Бумажный (обложка)</td></tr>
-<tr><td onclick="selectList('bindings-id')">Самодельный</td></tr>  
-<tr><td onclick="selectList('bindings-id')">Картонный</td></tr>
-    </tbody>
-  </table>
-  </div>
-</div>
-<div class="dropdown">
-  <button onclick='listShow("dropFormats")' class="dropbtn" id="formats-id">Формат</button>
-  <div id="dropFormats" class="dropdown-content">
-    <table id="formats">
-    <tbody id="formats-body">
-<tr><td onclick="selectList('formats-id')">Формат</td></tr>
-<tr><td onclick="selectList('formats-id')">Очень большой (cвыше 28 см)</td></tr>
-<tr><td onclick="selectList('formats-id')">Энциклопедический (25-27 см)</td></tr>
-<tr><td onclick="selectList('formats-id')">Увеличенный (22-24 см)</td></tr>  
-<tr><td onclick="selectList('formats-id')">Обычный (19-21 см)</td></tr>
-    </tbody>
-  </table>
-  </div>
-</div>
-<div class="dropdown">
-  <button onclick='listShow("dropConditions")' class="dropbtn" id="conditions-id">Состояние</button>
-  <div id="dropConditions" class="dropdown-content">
-    <table id="conditions">
-    <tbody id="conditions-body">
-<tr><td onclick="selectList('conditions-id')">Состояние</td></tr>
-<tr><td onclick="selectList('conditions-id')">отличное</td></tr>
-<tr><td onclick="selectList('conditions-id')">хорошее</td></tr>
-<tr><td onclick="selectList('conditions-id')">удовлетворительное</td></tr>  
-<tr><td onclick="selectList('conditions-id')">плохое</td></tr>
-    </tbody>
-  </table>
-  </div>
-</div>
-</p>
-<p><input type="button" id="new-line" onclick="addFilledLine()" value="Добавить строку"></input></p>
-<table id="books" class="editable">
-<!-- HEADER -->
-<thead>
-<tr>
-<th>Рубрика</th>
-<th>Автор</th>
-<th>Название</th>
-<th>Второе название</th>
-<th>Место издания</th>
-<th>Издательство</th>
-<th>Год</th>
-<th>Страниц</th>
-<th>Тип переплета</th>
-<th>Формат книги</th>
-<th>Цена</th>
-<th>Содержание</th>
-<th>Состояние</th>
-<th>Дата размещения (ДД.ММ.ГГГГ)</th>
-<th>Описание до 3-х картинок</th>
-<th>Учет. код продавца</th>
-<th>ISBN</th>
-</tr>
-</thead>
-<!-- ДАННЫЕ -->
-<tbody id="books-body">
-</tbody>
-</table>
-<p>
-<div>Загрузить список</div>
-<input type="file" id="load" onchange="loadBooks(this.files)"></input>
-<input type="button" id="save" onclick="saveBooks()" value="Сохранить список"></input>
-</p>
-<td align="left"> 
-  <select name="tipfind">
+ <select name="tipfind" id="tipfind-id">
    <OPTION VALUE="">Выберите рубрику:</OPTION>
 <OPTION VALUE="tavstralia">Австралия, Новая Зеландия, Океания</OPTION>
 <OPTION VALUE="tbazia">Азия:  Страны Ближнего Востока</OPTION>
@@ -348,5 +261,92 @@
 <OPTION VALUE="trudno">Затрудняюсь выбрать</OPTION>
 
   </select>
+<p>
+<div class="dropdown">
+  <button onclick='listShow("dropBindings")' class="dropbtn" id="bindings-id">Переплет</button>
+  <div id="dropBindings" class="dropdown-content">
+    <table id="bindings">
+    <tbody id="bindings-body">
+<tr><td onclick="selectList('bindings-id')">Переплет</td></tr>
+<tr><td onclick="selectList('bindings-id')">Бумажный (обложка)</td></tr>
+<tr><td onclick="selectList('bindings-id')">Самодельный</td></tr>  
+<tr><td onclick="selectList('bindings-id')">Картонный</td></tr>
+<tr><td onclick="selectList('bindings-id')">Твердый</td></tr>
+<tr><td onclick="selectList('bindings-id')">Тканевый</td></tr>  
+<tr><td onclick="selectList('bindings-id')">Владельческий</td></tr>
+<tr><td onclick="selectList('bindings-id')">Полукожанный</td></tr>
+<tr><td onclick="selectList('bindings-id')">Составной</td></tr>  
+<tr><td onclick="selectList('bindings-id')">Кожанный</td></tr>
+    </tbody>
+  </table>
+  </div>
+</div>
+<div class="dropdown">
+  <button onclick='listShow("dropFormats")' class="dropbtn" id="formats-id">Формат</button>
+  <div id="dropFormats" class="dropdown-content">
+    <table id="formats">
+    <tbody id="formats-body">
+<tr><td onclick="selectList('formats-id')">Формат</td></tr>
+<tr><td onclick="selectList('formats-id')">Очень большой (cвыше 28 см)</td></tr>
+<tr><td onclick="selectList('formats-id')">Энциклопедический (25-27 см)</td></tr>
+<tr><td onclick="selectList('formats-id')">Увеличенный (22-24 см)</td></tr>  
+<tr><td onclick="selectList('formats-id')">Обычный (19-21 см)</td></tr>
+<tr><td onclick="selectList('formats-id')">Уменьшенный (11-18 см)</td></tr>  
+<tr><td onclick="selectList('formats-id')">Миниатюрный (менее 10 см)</td></tr>
+    </tbody>
+  </table>
+  </div>
+</div>
+<div class="dropdown">
+  <button onclick='listShow("dropConditions")' class="dropbtn" id="conditions-id">Состояние</button>
+  <div id="dropConditions" class="dropdown-content">
+    <table id="conditions">
+    <tbody id="conditions-body">
+<tr><td onclick="selectList('conditions-id')">Состояние</td></tr>
+<tr><td onclick="selectList('conditions-id')">идеальное</td></tr>
+<tr><td onclick="selectList('conditions-id')">отличное</td></tr>
+<tr><td onclick="selectList('conditions-id')">хорошее</td></tr>
+<tr><td onclick="selectList('conditions-id')">удовлетворительное</td></tr>  
+<tr><td onclick="selectList('conditions-id')">плохое</td></tr>
+    </tbody>
+  </table>
+  </div>
+</div>
+</p>
+<p><input type="button" id="new-line" onclick="addFilledLine()" value="Добавить строку"></input></p>
+<table id="books" class="editable">
+<!-- HEADER -->
+<thead>
+<tr>
+<th>Рубрика</th>
+<th>Автор</th>
+<th>Название</th>
+<th>Второе название</th>
+<th>Место издания</th>
+<th>Издательство</th>
+<th>Год</th>
+<th>Страниц</th>
+<th>Тип переплета</th>
+<th>Формат книги</th>
+<th>Не используется</th>
+<th>Цена</th>
+<th>Содержание</th>
+<th>Состояние</th>
+<th>Дата размещения (ДД.ММ.ГГГГ)</th>
+<th>Описание до 3-х картинок</th>
+<th>Учет. код продавца</th>
+<th>ISBN</th>
+</tr>
+</thead>
+<!-- ДАННЫЕ -->
+<tbody id="books-body">
+</tbody>
+</table>
+<p>
+<div>Загрузить список</div>
+<input type="file" id="load" onchange="loadBooks(this.files)"></input>
+<input type="button" id="save" onclick="saveBooks()" value="Сохранить список"></input>
+</p>
+<td align="left"> 
 </body>
 </html> 
