@@ -135,7 +135,7 @@ function addFilledLine() {
                 if (obj.rubric.length>0) {
                     obj.rubric=`${obj.rubric}.`
                 }
-                isbn_str = `${isbn}`
+                isbn_str = `${obj.isbn}`
                 isbn_str = isbn_str.slice(0,3)+'-'+isbn_str.slice(3,4)+'-'+isbn_str.slice(4,6)+'-'+isbn_str.slice(6,12)+'-'+isbn_str.slice(12,13);
                 new_date = ((day.length==2)?day : `0${day}`)+'.'+((month.length==2)?month : `0${month}`)+'.'+new_date.getFullYear();
                 addLine([obj.rubric, obj.authors, obj.name, '', '', obj.publisher, obj.date, obj.pages, obj.binding, obj.format, '', '', obj.description, obj.condition, new_date, pic_str, '', isbn_str]);
@@ -269,6 +269,10 @@ function findOnAlib() {
 
 function findOnChitaiGorod() {
     name = document.getElementById("name-id").value;
+    if (!name.length) {
+        name = document.getElementById("isbn-id").value;
+        if (!name.length) return;
+    }
      if (chitai_gorod_win) chitai_gorod_win.close();
     chitai_gorod_win = window.open(`https://www.chitai-gorod.ru/search?phrase=${name}`);
 }
@@ -277,6 +281,50 @@ function findOnOzon() {
     name = document.getElementById("name-id").value;
      if (ozon_win) ozon_win.close();
     ozon_win = window.open(`https://www.ozon.ru/category/knigi-16500/?text=${name.replaceAll(' ','+')}`);
+}
+
+function setFormat(dimensions) {
+    let dimensions_list=["Очень большой (cвыше 28 см)","Энциклопедический (25-27 см)",
+    "Увеличенный (22-24 см)","Обычный (19-21 см)","Уменьшенный (11-18 см)",
+    "Миниатюрный (менее 10 см)"];
+    let dimensions_values=[28,25,22,19,11,10];
+    max_side = Math.max(Number(dimensions[0]),Number(dimensions[1]));
+    let i=0;
+    while (i<dimensions_values.length && max_side<dimensions_values[i]) {i++}
+    document.getElementById('formats-id').innerHTML = dimensions_list[i];
+}
+
+function setBinding(cover) {
+    let bindings_list=["Переплет", "Бумажный (обложка)","Самодельный","Картонный","Твердый","Тканевый","Владельческий","Полукожанный","Составной","Кожанный"];
+    if (~cover.indexOf("Мягкий")) {
+        document.getElementById('bindings-id').innerHTML = bindings_list[1];
+    } else if (~cover.indexOf("Твердый")){
+        document.getElementById('bindings-id').innerHTML = bindings_list[4];
+    } else {
+        document.getElementById('bindings-id').innerHTML = bindings_list[0];
+    }
+}
+
+function parseInfoChitaiGorod() {
+    info = document.getElementById("book-info-id").value.split('\n');
+    document.getElementById('name-id').value = info[0].trim();
+    document.getElementById('authors-id').value = `${info[1].trim().split(' ')[1]} ${info[1].trim()[0]}.`;
+    document.getElementById('publisher-id').value = info[4].trim();
+    let i = 5;
+    while (~info[i].trim().indexOf('Год издания')==0) {i++;}
+    document.getElementById('date-id').value = info[i].trim().split(' ')[2];
+    while (~info[i].trim().indexOf('ISBN')==0) {i++;}
+    if (!document.getElementById('isbn-id').value.length) {
+        document.getElementById('isbn-id').value = info[i].trim().split(' ')[1].replaceAll('-','');
+    }
+    while (~info[i].trim().indexOf('Количество страниц')==0) {i++;}
+    document.getElementById('pages-id').value = info[i].trim().split(' ')[2];
+    while (~info[i].trim().indexOf('Размер')==0) {i++;}
+    let dimensions = info[i].trim().split(' ')[1].split('x');
+    while (~info[i].trim().indexOf('Тип обложки')==0) {i++;}
+    let binding = info[i].trim().split('Тип обложки')[1].trim();
+    setFormat(dimensions);
+    setBinding(binding);
 }
 
 function getBookByISBN() {
