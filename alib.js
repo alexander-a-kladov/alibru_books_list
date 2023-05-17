@@ -1,12 +1,18 @@
 // ИНИЦИАЛИЗАЦИЯ - ДВОЙНОЙ ЩЕЛЧОК ДЛЯ РЕДАКТИРОВАНИЯ ЯЧЕЙКИ
 const cols = 18
+const Columns = {
+    Rubric:0,
+    Title:2,
+    Price:11,
+    Fotos:15
+};
 isbn_list = []
 isbn_index = 0
 alib_win = null;
 chitai_gorod_win = null;
 ozon_win = null;
-pic1 = null;
-pic2 = null;
+pic_url = 'http://alib.photo/gallery/ak8/';
+
 window.addEventListener("DOMContentLoaded", () => {
 for (let cell of document.querySelectorAll("#books td")) {
 cell.ondblclick = () => { editable.edit(cell); };
@@ -50,6 +56,22 @@ editable.selected = null;
 }}
 };
 
+function getAlibGoogleApisCategory(category, title) {
+    console.log(category);
+    regex = /^[a-z\s]+$/i;
+    if (!title.match(regex)) {
+    const googleapis_alib = JSON.parse('{"Russian poetry":"t19poem"}');
+    rubric = googleapis_alib[category];
+    } else {
+        rubric = "tlingbook";
+    }
+    return rubric;
+}
+
+function setRubric(rubric) {
+    document.getElementById("tipfind-id").value = rubric;
+}
+
 function readInputData() {
   let rubrics_file = null;
   fetch("rubrics.txt")
@@ -78,6 +100,17 @@ function readInputData() {
 }
 
 function addFilledLine() {
+      pic = [];
+      default_names=['Обложка','Задняя обл.', 'Страницы'];
+      pic.push(document.getElementById('pic1-id').value);
+      pic.push(document.getElementById('pic2-id').value);
+      pic.push(document.getElementById('pic3-id').value);
+      for (let i = 0;i < pic.length;i++) {
+        if ((pic[i].length>0)&&(pic[i].split(':').length==1)) {
+            pic[i] = `<a href="${pic_url}${pic[i]}">:${default_names[i]}</a>`;
+        }
+      }
+
      let obj = {
                 rubric:document.getElementById('tipfind-id').value,
                 authors:document.getElementById('authors-id').value,
@@ -90,7 +123,7 @@ function addFilledLine() {
                 condition:getListValue("conditions-id","Состояние"),
                 format:getListValue("formats-id","Формат").split(' ')[0],
                 isbn:document.getElementById('isbn-id').value};
-                pic_str = ((pic1)?`${pic1}:Обложка:`:"")+((pic2)?`${pic2}:Задняя обл.:`:"");
+                pic_str = ((pic[0])?`${pic[0]}:`:"")+((pic[1])?`${pic[1]}:`:"")+((pic[2])?`${pic[2]}:`:"");
                 new_date = new Date();
                 day = `${new_date.getDate()}`;
                 month = `${new_date.getMonth()+1}`;
@@ -105,7 +138,7 @@ function addFilledLine() {
                 isbn_str = `${isbn}`
                 isbn_str = isbn_str.slice(0,3)+'-'+isbn_str.slice(3,4)+'-'+isbn_str.slice(4,6)+'-'+isbn_str.slice(6,12)+'-'+isbn_str.slice(12,13);
                 new_date = ((day.length==2)?day : `0${day}`)+'.'+((month.length==2)?month : `0${month}`)+'.'+new_date.getFullYear();
-                addLine([obj.rubric, obj.authors, obj.name, '', '', obj.publisher, obj.date, obj.pages, obj.binding, obj.format, '', obj.description, obj.condition, new_date, pic_str, '', isbn_str]);
+                addLine([obj.rubric, obj.authors, obj.name, '', '', obj.publisher, obj.date, obj.pages, obj.binding, obj.format, '', '', obj.description, obj.condition, new_date, pic_str, '', isbn_str]);
 }
 
 function addLine(list = null) {
@@ -136,8 +169,13 @@ function saveBooks() {
         line = cell.innerHTML.replaceAll("\n"," ").replaceAll("\t"," ").replaceAll('"','').replaceAll('«',' ')
                             .replaceAll('»',' ').replaceAll('\'',' ').replaceAll(' .','. ').replaceAll(' ,',', ')
                             .replaceAll(' ;','; ').replaceAll(' :',': ').replaceAll(' !','! ').replaceAll('<br>',' ').replaceAll('  ',' ').trim();
-   	    books += line;
-        if ((line.length==0) && (count == 0 || count == 2 || count == 11)) {
+   	    if (count == Columns.Fotos) {
+            console.log(line);
+            line = line.replaceAll(`<a href=${pic_url}`,"").replaceAll("</a>","").replaceAll(">:",":");
+            console.log(line);
+        }
+        books += line;
+        if ((line.length==0) && (count == Columns.Rubric || count == Columns.Title || count == Columns.Price)) {
             error = true;
         }
 
@@ -173,7 +211,23 @@ function loadBooks(files) {
         arr = reader.result.split('\n');
         arr.forEach(function(item) {
         if (item.length>0) {
-            addLine(item.split('\t'));
+            line = item.split('\t');
+            console.log(line[Columns.Fotos]);
+            images_str=line[Columns.Fotos].split(':');
+            console.log(images_str);
+            img_line=""
+            for (let i=0;i<images_str.length;i++) {
+                if (images_str[i].length>0) {
+                if ((i%2)==0) {
+                    img_line+=`<a href="${pic_url}${images_str[i]}">`
+                } else {
+                    img_line+=`:${images_str[i]}:</a>`
+                }
+                }
+            }
+            console.log(` after ${img_line}`);
+            line[Columns.Fotos] = img_line;
+            addLine(line);
         }
         });
    }
@@ -229,8 +283,9 @@ function getBookByISBN() {
     if (isbn_list.length) {
         if (isbn_index<isbn_list.length) {
             document.getElementById("isbn-id").value = isbn_list[isbn_index].split(':')[0];
-            pic1 = isbn_list[isbn_index].split(':')[1]
-            pic2 = isbn_list[isbn_index].split(':')[2]
+            document.getElementById('pic1-id').value = isbn_list[isbn_index].split(':')[1]??"";
+            document.getElementById('pic2-id').value = isbn_list[isbn_index].split(':')[2]??"";
+            document.getElementById('pic3-id').value = isbn_list[isbn_index].split(':')[3]??"";
             isbn_index += 1;
         } else {
             document.getElementById("isbn-count").innerHTML = 'Все книги из файла обработаны';
@@ -249,14 +304,22 @@ function getBookByISBN() {
         return response.json()
         })
         .then(data => {
+            if (!data.totalItems) {
+                document.getElementById('name-id').value="Книга не найдена GoogleBooks";
+            }
             for (let i = 0; i<data.totalItems; i++) {
                 volume = data.items[i].volumeInfo;
                 document.getElementById('name-id').value = volume.title ?? "";
                 document.getElementById('authors-id').value = volume.authors ?? "";
                 document.getElementById('publisher-id').value = volume.publisher ?? "";
                 document.getElementById('date-id').value = volume.publishedDate ?? "";
-                document.getElementById('description-id').value = volume.description.slice(0,256) ?? "";
+                document.getElementById('description-id').value = ((volume.description)?volume.description.slice(0,256):"");
                 document.getElementById('pages-id').value = volume.pageCount ?? "";
+                rubric = getAlibGoogleApisCategory(volume.categories[0], volume.title);
+                console.log(rubric);
+                if (rubric) {
+                    setRubric(rubric);
+                }
             }
         })
         .catch(error => console.log(error));
