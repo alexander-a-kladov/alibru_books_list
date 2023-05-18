@@ -4,7 +4,9 @@
 <meta charset="UTF-8">
 <title>Alib book editor</title>
 <link rel="stylesheet" href="style.css"/>
+<script src="set_common.js"></script>
 <script src="chitai_gorod.js"></script>
+<script src="ozon.js"></script>
 <script defer src="alib.js"></script>
 </head>
 <body>
@@ -26,8 +28,9 @@
 <input type="button" onclick="findOnChitaiGorod()" value="Найти на Читай Городе">
 <input type="button" onclick="findOnOzon()" value="Найти на Ozon">
 </p>
-<textarea placeholder="Скопируй сюда текстовую информацию о книге" id="book-info-id"></textarea>
 <input type="button" onclick="parseInfoChitaiGorod()" value="Обработать информацию Читай-Города">
+<input type="button" onclick="parseInfoOzon()" value="Обработать информацию Озон">
+<div><textarea placeholder="Скопируй сюда текстовую информацию о книге" id="book-info-id"></textarea></div>
 <p>
 <input type="text" id="name-id" size="25"><input type="text" id="authors-id" size="25">
 <input type="text" id="publisher-id" size="25"><input type="text" id="date-id" size="25">

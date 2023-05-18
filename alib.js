@@ -9,8 +9,6 @@ const Columns = {
 isbn_list = []
 isbn_index = 0
 alib_win = null;
-chitai_gorod_win = null;
-ozon_win = null;
 pic_url = 'http://alib.photo/gallery/ak8/';
 
 window.addEventListener("DOMContentLoaded", () => {
@@ -289,12 +287,6 @@ function findOnAlib() {
     isbn = document.getElementById("isbn-id").value;
      if (alib_win) alib_win.close();
     alib_win = window.open(`https://www.alib.ru/findp.php4?isbnp=${isbn}`);
-}
-
-function findOnOzon() {
-    name = document.getElementById("name-id").value;
-     if (ozon_win) ozon_win.close();
-    ozon_win = window.open(`https://www.ozon.ru/category/knigi-16500/?text=${name.replaceAll(' ','+')}`);
 }
 
 function getBookByISBN() {
