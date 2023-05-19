@@ -125,8 +125,12 @@ function addFilledLine() {
       pic.push(document.getElementById('pic2-id').value);
       pic.push(document.getElementById('pic3-id').value);
       for (let i = 0;i < pic.length;i++) {
-        if ((pic[i].length>0)&&(pic[i].split(':').length==1)) {
-            pic[i] = `<a href="${pic_url}${pic[i]}">:${default_names[i]}</a>`;
+        if (pic[i].length>0) {
+        if (pic[i].slice(7).split(':').length==1) {
+            pic[i] = `<a href="${pic[i]}" target="_blanc">:${default_names[i]}</a>`;
+        } else {
+            pic[i] = `<a href="${pic[i].slice(0,7)}${pic[i].slice(7).split(':')[0]}" target="_blanc">:${pic[i].slice(7).split(':')[1]}</a>`;
+        }
         }
       }
 
@@ -178,6 +182,8 @@ function addLine(list = null) {
 
   let books = document.getElementById("books-body");
   books.appendChild(line);
+  quantity = Number(document.getElementById("quantity-id").innerText)+1;
+  document.getElementById("quantity-id").innerText = `${quantity}`;
 }
 
 function saveBooks() {
@@ -193,7 +199,7 @@ function saveBooks() {
                             .replaceAll(' ;','; ').replaceAll(' :',': ').replaceAll(' !','! ').replaceAll('<br>',' ').replaceAll('  ',' ').trim();
    	    if (count == Columns.Fotos) {
             console.log(line);
-            line = line.replaceAll(`<a href=${pic_url}`,"").replaceAll("</a>","").replaceAll(">:",":");
+            line = line.replaceAll(`<a href=${pic_url}`,"").replaceAll(" target=_blanc","").replaceAll("</a>","").replaceAll(">:",":");
             console.log(line);
         }
         books += line;
@@ -223,6 +229,7 @@ function saveBooks() {
     link.href = URL.createObjectURL(file);
     link.click();
     URL.revokeObjectURL(link.href);
+
 }
 
 function loadBooks(files) {
@@ -241,13 +248,12 @@ function loadBooks(files) {
             for (let i=0;i<images_str.length;i++) {
                 if (images_str[i].length>0) {
                 if ((i%2)==0) {
-                    img_line+=`<a href="${pic_url}${images_str[i]}">`
+                    img_line+=`<a href="${pic_url}${images_str[i]}" target="_blanc">`
                 } else {
                     img_line+=`:${images_str[i]}:</a>`
                 }
                 }
             }
-            console.log(` after ${img_line}`);
             line[Columns.Fotos] = img_line;
             addLine(line);
         }

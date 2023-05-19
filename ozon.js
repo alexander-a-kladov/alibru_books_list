@@ -2,7 +2,13 @@ ozon_win = null;
 
 function findOnOzon() {
     title = document.getElementById("name-id").value;
-     if (ozon_win) ozon_win.close();
+    if (!title.length) {
+        title = document.getElementById('isbn-id').value;
+    }
+    if (!title.length) {
+        title = document.getElementById('authors-id').value;
+    }
+    if (ozon_win) ozon_win.close();
     ozon_win = window.open(`https://www.ozon.ru/category/knigi-16500/?text=${title.replaceAll(' ','+')}`);
 }
 
@@ -21,15 +27,21 @@ function parseInfoOzon() {
     document.getElementById('authors-id').value = obj["Автор на обложке"];
     document.getElementById('publisher-id').value = obj["Издательство"];
     document.getElementById('date-id').value = obj["Год выпуска"];
-    document.getElementById('isbn-id').value = obj["ISBN"].replaceAll('-','');
-    document.getElementById('pages-id').value = obj["Количество страниц"];
-    dimensions = obj["Размеры, мм"].split('x');
-    for (let i=0;i<dimensions.length;i++) {
-        value = Number(dimensions[i]);
-        dimensions[i] = +value/10;
-        console.log(dimensions[i]); 
+    if (obj["ISBN"]) {
+        document.getElementById('isbn-id').value = obj["ISBN"].replaceAll('-','');
     }
-    setFormat(dimensions);
-    setBinding(obj["Тип обложки"]);
+    document.getElementById('pages-id').value = obj["Количество страниц"];
+    if (obj["Размеры, мм"]) {
+        dimensions = obj["Размеры, мм"].split('x');
+        for (let i=0;i<dimensions.length;i++) {
+            value = Number(dimensions[i]);
+            dimensions[i] = +value/10;
+            console.log(dimensions[i]); 
+        }
+        setFormat(dimensions);
+    }
+    if (obj["Тип обложки"]) {
+        setBinding(obj["Тип обложки"]);
+    }
     document.getElementById('conditions-id').innerHTML = conditions_list[1];
 }
