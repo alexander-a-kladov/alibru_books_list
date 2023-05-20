@@ -63,3 +63,20 @@ background: #ffe7e7;
 
 /* Показать выпадающее меню (используйте JS, чтобы добавить этот класс .dropdown-content содержимого, когда пользователь нажимает на кнопку выпадающего списка) */
 .show {display:block;} 
+
+body {
+  background-image: url("../images/paper.jpg");
+  background-color: #aaaaaa;
+ }
+
+ input {
+  background-color: rgb(216, 206, 168);
+ }
+
+ textarea {
+  background-color: rgb(216, 206, 168);
+ }
+
+ select {
+  background-color: rgb(216, 206, 168);
+ }

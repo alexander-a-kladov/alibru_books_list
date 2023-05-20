@@ -12,8 +12,9 @@ alib_win = null;
 pic_url = 'http://alib.photo/gallery/ak8/';
 
 window.addEventListener("DOMContentLoaded", () => {
-for (let cell of document.querySelectorAll("#books td")) {
-cell.ondblclick = () => { editable.edit(cell); };
+    setRubricsOptions();
+    for (let cell of document.querySelectorAll("#books td")) {
+    cell.ondblclick = () => { editable.edit(cell); };
 }
 });
 let editable = {
@@ -68,49 +69,10 @@ function getAlibGoogleApisCategory(category, title) {
     return rubric;
 }
 
-function setRubric(rubric) {
-    document.getElementById("tipfind-id").value = rubric;
-}
-
-function readInputData() {
-  let rubrics_file = null;
-  fetch("rubrics.txt")
-  .then(response => response.text())
-  .then(text => rubrics_file = text)
-  .catch(console.log("Error file read"));
-    console.log(rubrics_file);
-  if (rubrics_file) {
-    lines = rubrics_file.split('\n');
-    rubrics_body = document.getElementById("rubrics-body")
-    console.log(lines.length)
-    for (let i = 0; i < lines.length; i++) {
-        console.log(lines[i]);
-        if (lines[i].length > 0) {
-            let line = document.createElement("tr");
-            let td = document.createElement("td");
-            td.innerHTML = lines[i].split("\t")[0];
-            line.appendChild(td);
-            td = document.createElement("td");
-            td.innerHTML = lines[i].split("\t")[1];
-            line.appendChild(td);
-            rubrics_body.appendChild(line);
-        }
-    }
-}
-}
-
-function addRubricToAccum() {
-    rubrics = document.getElementById('rubrics-accum-id').value;
-    if (rubrics.split('.').length<4) {
-        document.getElementById('rubrics-accum-id').value = `${rubrics}${document.getElementById('tipfind-id').value}.`;
-    }
-}
-
-function clearRubricsAccum() {
-    document.getElementById('rubrics-accum-id').value = '';
-}
-
 function getTrueISBN(isbn_str) {
+    if (!isbn_str.length) {
+        return "";
+    }
     if (isbn_str.length==13) {
         return `${isbn_str.slice(0,3)}-${isbn_str.slice(3,4)}-${isbn_str.slice(4,6)}-${isbn_str.slice(6,12)}-${isbn_str.slice(12,13)}`;
     } else {
