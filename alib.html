@@ -2,13 +2,18 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<title>Alib book editor</title>
+<title>Alib Book Editor</title>
 <link rel="stylesheet" href="style/style.css"/>
 <script src="modules/set_common.js"></script>
+<script src="modules/isbn.js"></script>
 <script src="modules/rubrics.js"></script>
 <script src="modules/chitai_gorod.js"></script>
 <script src="modules/ozon.js"></script>
-<script defer src="modules/alib.js"></script>
+<script src="modules/alib.js"></script>
+<script src="modules/books.js"></script>
+<script src="modules/table.js"></script>
+<script src="modules/lists.js"></script>
+<script defer src="modules/index.js"></script>
 </head>
 <body>
 <details>
@@ -19,10 +24,10 @@
 <input type="file" id="isbn-file-id" onchange="readISBNFile(this.files)">
 <div id="isbn-count"></div>
 <p><input type="button" id="get-book-by-isbn" onclick="getBookByISBN()" value="Данные по книге">
-<input type="text" id="isbn-id" size="23">
-<input type="text" id="pic1-id" size="23">
-<input type="text" id="pic2-id" size="23">
-<input type="text" id="pic3-id" size="23">
+<input type="text" id="isbn-id" size="23" placeholder="ISBN">
+<input type="text" id="pic1-id" size="23" placeholder="Фото обложки">
+<input type="text" id="pic2-id" size="23" placeholder="Фото обратной стороны">
+<input type="text" id="pic3-id" size="23" placeholder="Фото страниц">
 </p>
 <p>
 <input type="button" onclick="findOnAlib()" value="Найти на Alib">
@@ -33,37 +38,33 @@
 <input type="button" onclick="parseInfoOzon()" value="Обработать информацию Озон">
 <div><textarea placeholder="Скопируй сюда текстовую информацию о книге" id="book-info-id"></textarea></div>
 <p>
-<input type="text" id="name-id" size="25"><input type="text" id="authors-id" size="25">
-<input type="text" id="publisher-id" size="25"><input type="text" id="date-id" size="25">
-<input type="text" id="pages-id" size="25"><textarea placeholder="Краткое содержание" id="description-id" width=50px></textarea>
+<input type="text" id="name-id" size="25" placeholder="Название книги"><input type="text" id="authors-id" size="25" placeholder="Авторы, через запятую <=3">
+<input type="text" id="publisher-id" size="25" placeholder="Издательство"><input type="text" id="date-id" size="25" placeholder="Год издания">
+<input type="text" id="pages-id" size="25" placeholder="Количество Страниц">
+<textarea placeholder="Краткое содержание (Аннотация)" id="description-id" width=50px></textarea>
 </p>
 <p>
-<input type="text" id="second-name-id" size=30><input type="text" id="publ-place-id" size=30>
-<input type="text" id="price-id" size=30><input type="text" id="sellers-code-id" width=50>
+<input type="text" id="second-name-id" size=30 placeholder="Второе название"><input type="text" id="publ-place-id" size=30 placeholder="Место издания">
+<input type="text" id="price-id" size=30 placeholder="Цена"><input type="text" id="sellers-code-id" width=50 placeholder="Уч. код продавца">
 </p>
  <select name="tipfind" id="tipfind-id" onchange="addRubricToAccum()">
    <OPTION VALUE="">Выберите рубрику:</OPTION>
   </select>
 <p>
 <p>
-<input type="text" id="rubrics-accum-id" size=70>
+<input type="text" id="rubrics-accum-id" size=70 placeholder="Рубрики">
 <input type="button" onclick="clearRubricsAccum()" value="Очистить рубрики">
+</p>
+<p>
+<input type="text" id="binding-id" size=23 placeholder="Переплет">
+<input type="text" id="format-id" size=23 placeholder="Формат">
+<input type="text" id="condition-id" size=23 placeholder="Состояние">
 </p>
 <div class="dropdown">
   <button onclick='listShow("dropBindings")' class="dropbtn" id="bindings-id">Переплет</button>
   <div id="dropBindings" class="dropdown-content">
     <table id="bindings">
     <tbody id="bindings-body">
-<tr><td onclick="selectList('bindings-id')">Переплет</td></tr>
-<tr><td onclick="selectList('bindings-id')">Бумажный (обложка)</td></tr>
-<tr><td onclick="selectList('bindings-id')">Самодельный</td></tr>  
-<tr><td onclick="selectList('bindings-id')">Картонный</td></tr>
-<tr><td onclick="selectList('bindings-id')">Твердый</td></tr>
-<tr><td onclick="selectList('bindings-id')">Тканевый</td></tr>  
-<tr><td onclick="selectList('bindings-id')">Владельческий</td></tr>
-<tr><td onclick="selectList('bindings-id')">Полукожанный</td></tr>
-<tr><td onclick="selectList('bindings-id')">Составной</td></tr>  
-<tr><td onclick="selectList('bindings-id')">Кожанный</td></tr>
     </tbody>
   </table>
   </div>
@@ -73,13 +74,6 @@
   <div id="dropFormats" class="dropdown-content">
     <table id="formats">
     <tbody id="formats-body">
-<tr><td onclick="selectList('formats-id')">Формат</td></tr>
-<tr><td onclick="selectList('formats-id')">Очень большой (cвыше 28 см)</td></tr>
-<tr><td onclick="selectList('formats-id')">Энциклопедический (25-27 см)</td></tr>
-<tr><td onclick="selectList('formats-id')">Увеличенный (22-24 см)</td></tr>  
-<tr><td onclick="selectList('formats-id')">Обычный (19-21 см)</td></tr>
-<tr><td onclick="selectList('formats-id')">Уменьшенный (11-18 см)</td></tr>  
-<tr><td onclick="selectList('formats-id')">Миниатюрный (менее 10 см)</td></tr>
     </tbody>
   </table>
   </div>
@@ -89,12 +83,15 @@
   <div id="dropConditions" class="dropdown-content">
     <table id="conditions">
     <tbody id="conditions-body">
-<tr><td onclick="selectList('conditions-id')">Состояние</td></tr>
-<tr><td onclick="selectList('conditions-id')">идеальное</td></tr>
-<tr><td onclick="selectList('conditions-id')">отличное</td></tr>
-<tr><td onclick="selectList('conditions-id')">хорошее</td></tr>
-<tr><td onclick="selectList('conditions-id')">удовлетворительное</td></tr>  
-<tr><td onclick="selectList('conditions-id')">плохое</td></tr>
+    </tbody>
+  </table>
+  </div>
+</div>
+<div class="dropdown">
+  <button onclick='listShow("dropUchCode")' class="dropbtn" id="uchcodes-id">Учет. Код</button>
+  <div id="dropUchCode" class="dropdown-content">
+    <table id="uchcodes">
+    <tbody id="uchcodes-body">
     </tbody>
   </table>
   </div>

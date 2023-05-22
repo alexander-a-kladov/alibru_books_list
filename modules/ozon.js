@@ -1,13 +1,7 @@
 ozon_win = null;
 
 function findOnOzon() {
-    title = document.getElementById("name-id").value;
-    if (!title.length) {
-        title = document.getElementById('isbn-id').value;
-    }
-    if (!title.length) {
-        title = document.getElementById('authors-id').value;
-    }
+    let title = getTitleForSearch();
     if (ozon_win) ozon_win.close();
     ozon_win = window.open(`https://www.ozon.ru/category/knigi-16500/?text=${title.replaceAll(' ','+')}`);
 }
@@ -27,9 +21,8 @@ function parseInfoOzon() {
     document.getElementById('authors-id').value = obj["Автор на обложке"];
     document.getElementById('publisher-id').value = obj["Издательство"];
     document.getElementById('date-id').value = obj["Год выпуска"];
-    if (obj["ISBN"]) {
-        document.getElementById('isbn-id').value = obj["ISBN"].replaceAll('-','');
-    }
+    setISBN(obj["ISBN"]);
+    
     document.getElementById('pages-id').value = obj["Количество страниц"];
     if (obj["Размеры, мм"]) {
         dimensions = obj["Размеры, мм"].split('x');

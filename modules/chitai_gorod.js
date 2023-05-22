@@ -1,20 +1,15 @@
 chitai_gorod_win = null;
 
 function findOnChitaiGorod() {
-    title = document.getElementById("name-id").value;
-    if (!title.length) {
-        title = document.getElementById("isbn-id").value;
-        if (!title.length) return;
-    }
      if (chitai_gorod_win) chitai_gorod_win.close();
-    chitai_gorod_win = window.open(`https://www.chitai-gorod.ru/search?phrase=${title}`);
+    chitai_gorod_win = window.open(`https://www.chitai-gorod.ru/search?phrase=${getTitleForSearch()}`);
 }
 
 function parseInfoChitaiGorod() {
     fixInfo();
     info = document.getElementById("book-info-id").value.split('\n');
     document.getElementById('name-id').value = info[0].trim();
-    document.getElementById('authors-id').value = `${info[1].trim().split(' ')[1]} ${info[1].trim()[0]}.`;
+    document.getElementById('authors-id').value = `${info[1].trim()}`;
     document.getElementById('publisher-id').value = info[4].trim();
     i = findInfoToken(info, 5, 'Год издания');
     if (~i) {

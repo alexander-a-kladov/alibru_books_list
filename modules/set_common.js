@@ -1,4 +1,13 @@
-const conditions_list=["Состояние", "идеальное", "отличное", "хорошее", "удовлетворительное", "плохое"];
+function getTitleForSearch() {
+    let title = document.getElementById("name-id").value;
+    if (!title.length) {
+        title = getPlainISBN();
+    }
+    if (!title.length) {
+        title = document.getElementById('authors-id').value;
+    }
+    return title;
+}
 
 function findInfoToken(info, i, token) {
     while (i<info.length && ~info[i].trim().indexOf(token)==0) {i++;}
