@@ -28,6 +28,7 @@
 <input type="text" id="pic1-id" size="23" placeholder="Фото обложки">
 <input type="text" id="pic2-id" size="23" placeholder="Фото обратной стороны">
 <input type="text" id="pic3-id" size="23" placeholder="Фото страниц">
+<input type="button" id="clear-inputs-id" onclick="clearInputs()" value="Очистить данные">
 </p>
 <p>
 <input type="button" onclick="findOnAlib()" value="Найти на Alib">
@@ -47,7 +48,7 @@
 <input type="text" id="second-name-id" size=30 placeholder="Второе название"><input type="text" id="publ-place-id" size=30 placeholder="Место издания">
 <input type="text" id="price-id" size=30 placeholder="Цена"><input type="text" id="sellers-code-id" width=50 placeholder="Уч. код продавца">
 </p>
- <select name="tipfind" id="tipfind-id" onchange="addRubricToAccum()">
+ <select name="tipfind" id="tipfind-id" onchange="setRubricOn()">
    <OPTION VALUE="">Выберите рубрику:</OPTION>
   </select>
 <p>
@@ -60,6 +61,15 @@
 <input type="text" id="format-id" size=23 placeholder="Формат">
 <input type="text" id="condition-id" size=23 placeholder="Состояние">
 </p>
+<div class="dropdown">
+  <button onclick='listShow("dropRubrics")' class="dropbtn" id="rubrics-id">Рубрики</button>
+  <div id="dropRubrics" class="dropdown-content">
+    <table id="rubrics">
+    <tbody id="rubrics-body">
+    </tbody>
+  </table>
+  </div>
+</div>
 <div class="dropdown">
   <button onclick='listShow("dropBindings")' class="dropbtn" id="bindings-id">Переплет</button>
   <div id="dropBindings" class="dropdown-content">

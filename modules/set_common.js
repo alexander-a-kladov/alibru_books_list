@@ -1,3 +1,11 @@
+function clearInputs() {
+    inputs = ['isbn-id', 'pic1-id', 'pic2-id', 'pic3-id', 'name-id', 'authors-id', 'publisher-id', 'date-id', 'pages-id', 'description-id', 'second-name-id',
+'publ-place-id', 'price-id', 'sellers-code-id', 'binding-id', 'format-id', 'condition-id'];
+    for (el of inputs) {
+        document.getElementById(el).value = "";
+    }
+}
+
 function getTitleForSearch() {
     let title = document.getElementById("name-id").value;
     if (!title.length) {
@@ -36,16 +44,16 @@ function setFormat(dimensions) {
     max_side = Math.max(Number(dimensions[0]),Number(dimensions[1]));
     let i=0;
     while (i<dimensions_values.length && max_side<dimensions_values[i]) {i++}
-    document.getElementById('formats-id').innerHTML = dimensions_list[i];
+    document.getElementById('format-id').innerHTML = dimensions_list[i];
 }
 
 function setBinding(cover) {
     let bindings_list=["Переплет", "Бумажный (обложка)","Самодельный","Картонный","Твердый","Тканевый","Владельческий","Полукожанный","Составной","Кожанный"];
     if (~cover.indexOf("Мягкий")) {
-        document.getElementById('bindings-id').innerHTML = bindings_list[1];
+        document.getElementById('binding-id').innerHTML = bindings_list[1];
     } else if (~cover.indexOf("Твердый")){
-        document.getElementById('bindings-id').innerHTML = bindings_list[4];
+        document.getElementById('binding-id').innerHTML = bindings_list[4];
     } else {
-        document.getElementById('bindings-id').innerHTML = bindings_list[0];
+        document.getElementById('binding-id').innerHTML = bindings_list[0];
     }
 }

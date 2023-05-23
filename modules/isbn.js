@@ -53,6 +53,18 @@ function readISBNFile(files) {
     };
   }
 
+function getAlibGoogleApisCategory(category, title) {
+    console.log(category);
+    regex = /^[a-z\s]+$/i;
+    if (!title.match(regex)) {
+    const googleapis_alib = JSON.parse('{"Russian poetry":"t19poem"}');
+    rubric = googleapis_alib[category];
+    } else {
+        rubric = "tlingbook";
+    }
+    return rubric;
+}
+
 function getBookByISBN() {
     if (isbn_list.length) {
         if (isbn_index<isbn_list.length) {
@@ -92,7 +104,7 @@ function getBookByISBN() {
                 rubric = getAlibGoogleApisCategory(volume.categories[0], volume.title);
                 console.log(rubric);
                 if (rubric) {
-                    setRubric(rubric);
+                    addRubricToAccum(rubric);
                 }
             }
         })

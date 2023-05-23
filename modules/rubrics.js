@@ -242,14 +242,14 @@ function setRubricsOptions() {
     }
 }
 
-function setRubric(rubric) {
-    document.getElementById("tipfind-id").value = rubric;
+function setRubricOn() {
+    addRubricToAccum(document.getElementById('tipfind-id').value);
 }
 
-function addRubricToAccum() {
+function addRubricToAccum(rubric) {
     rubrics = document.getElementById('rubrics-accum-id').value;
     if (rubrics.split('.').length<4) {
-        document.getElementById('rubrics-accum-id').value = `${rubrics}${document.getElementById('tipfind-id').value}.`;
+        document.getElementById('rubrics-accum-id').value = `${rubrics}${rubric}.`;
     }
 }
 

@@ -16,18 +16,6 @@ window.addEventListener("DOMContentLoaded", () => {
 }
 });
 
-function getAlibGoogleApisCategory(category, title) {
-    console.log(category);
-    regex = /^[a-z\s]+$/i;
-    if (!title.match(regex)) {
-    const googleapis_alib = JSON.parse('{"Russian poetry":"t19poem"}');
-    rubric = googleapis_alib[category];
-    } else {
-        rubric = "tlingbook";
-    }
-    return rubric;
-}
-
 function addFilledLine() {
       pic = [];
       default_names=['Обложка','Задняя обл.', 'Страницы'];
@@ -58,7 +46,7 @@ function addFilledLine() {
                 condition:getListValue("condition-id"),
                 format:getListValue("format-id").split(' ')[0],
                 price:document.getElementById('price-id').value,
-                isbn:document.getElementById('isbn-id').value,
+                isbn:getPlainISBN(),
                 sellers_code:document.getElementById('sellers-code-id').value
             };
                 pic_str = ((pic[0])?`${pic[0]}:`:"")+((pic[1])?`${pic[1]}:`:"")+((pic[2])?`${pic[2]}:`:"");
@@ -78,6 +66,7 @@ function addFilledLine() {
 
 function addLine(list = []) {
   updateUchCodeList(list[Columns.UchCodes]);
+  updateRubrics(list[Columns.Rubric]);
   let line = document.createElement("tr");
   for (let i=0; i<cols;i++) { 
   	let td = document.createElement("td");
