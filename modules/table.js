@@ -1,4 +1,13 @@
 let editable = {
+dbclick_handler: (event) => {
+        cell = event.target;
+        row = event.target.parentNode.rowIndex-1;
+        col = event.target.cellIndex;
+        event.target.innerHTML = getText(row, col);
+        editable.row = row;
+        editable.col = col;
+        editable.edit(cell); 
+    },
 // "ПРЕОБРАЗОВАТЬ" В РЕДАКТИРОВАННУЮ ЯЧЕЙКУ
 edit: (cell) => {
 // УДАЛИТЬ "ДВОЙНОЙ ЩЕЛЧОК ДЛЯ РЕДАКТИРОВАНИЯ"
@@ -24,14 +33,41 @@ close: (evt) => { if (evt.target != editable.selected) {
 // отправить значение на сервер?
 // обновить расчеты в таблице?
 // УДАЛИТЬ "РЕДАКТИРОВАНИЕ"
+setText(editable.row, editable.col, editable.selected.innerHTML);
+if (editable.col == Columns.Description) {
+    editable.selected.innerHTML = `${editable.selected.innerHTML.slice(0,5)}...`;
+}
 window.getSelection().removeAllRanges();
 editable.selected.contentEditable = false;
 // ВОССТАНОВИТЬ КЛИК-СЛУШАТЕЛИ
 window.removeEventListener("click", editable.close);
 let cell = editable.selected;
-cell.ondblclick = () => { editable.edit(cell); };
+cell.ondblclick = editable.dbclick_handler;
 // "СНЯТЬ ПОМЕТКУ" ТЕКУЩЕЙ ВЫБРАННОЙ ЯЧЕЙКИ
 editable.selected.classList.remove("edit");
 editable.selected = null;
+editable.row = undefined;
+editable.col = undefined;
 }}
 };
+
+let table_descriptions=[];
+let table_index=0;
+
+function addRow() {
+    table_descriptions[table_index] = new Array(table_info.Cols);
+    table_index+=1;
+}
+
+function setText(index, column, text) {
+    if (index<table_index && column>=0 && column <table_info.Cols) {
+        table_descriptions[index][column] = text;
+    }
+}
+
+function getText(index, column) {
+    if (index<table_index && column>=0 && column <table_info.Cols) {
+        return table_descriptions[index][column];
+    }
+    return undefined;
+}

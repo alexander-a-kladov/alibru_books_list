@@ -6,33 +6,30 @@ function saveBooks() {
     let count_books=0;
     let books="";
     let count=0;
-    for (let cell of document.querySelectorAll("#books td")) {
-     if (count < cols) {
-         line = cell.innerHTML.replaceAll("\n"," ").replaceAll("\t"," ").replaceAll('"','').replaceAll('«',' ')
+    for (let i=0;i<table_index;i++) {
+     for (let c=0;c<table_info.Cols;c++) {
+         line = getText(i, c).replaceAll("\n"," ").replaceAll("\t"," ").replaceAll('"','').replaceAll('«',' ')
                              .replaceAll('»',' ').replaceAll('\'',' ').replaceAll(' .','. ').replaceAll(' ,',', ')
                              .replaceAll(' ;','; ').replaceAll(' :',': ').replaceAll(' !','! ').replaceAll('<br>',' ').replaceAll('  ',' ').trim();
-            if (count == Columns.Fotos) {
+        if (c == Columns.Fotos) {
              line = line.replaceAll(`<a href=${pic_url}`,"").replaceAll(" target=_blanc","").replaceAll("</a>","").replaceAll(">:",":");
-         }
+        }
          books += line;
-         if ((line.length==0) && (count == Columns.Rubric || count == Columns.Title || count == Columns.Price)) {
+         if ((line.length==0) && (c == Columns.Rubric || c == Columns.Title || c == Columns.Price)) {
              error = true;
          }
  
-            if (count < cols -1)
+            if (c < table_info.Cols -1)
                 books += "\t";
-            count += 1;
-            if (count == cols) {
-                count = 0;
-                books += "\n";
-             if (error) {
-                 error = false;
-                 errors += 1;
-             }
-             count_books += 1;
-            }
         }
+        books += "\n";
+        if (error) {
+            error = false;
+            errors += 1;
+        }
+        count_books += 1;
     }
+
      alert(`Книг обработано ${count_books}, ошибок ${errors} (не заданы Рубрика, Название или Цена)`);
      let file = new File([books], "test_save.txt", {type: "text/plain"});
      let link = document.createElement('a');

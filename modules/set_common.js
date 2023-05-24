@@ -1,6 +1,6 @@
 function clearInputs() {
     inputs = ['isbn-id', 'pic1-id', 'pic2-id', 'pic3-id', 'name-id', 'authors-id', 'publisher-id', 'date-id', 'pages-id', 'description-id', 'second-name-id',
-'publ-place-id', 'price-id', 'sellers-code-id', 'binding-id', 'format-id', 'condition-id'];
+'publ-place-id', 'price-id', 'sellers-code-id', 'binding-id', 'format-id', 'condition-id', 'defects-id'];
     for (el of inputs) {
         document.getElementById(el).value = "";
     }

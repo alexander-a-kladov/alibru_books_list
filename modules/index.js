@@ -1,8 +1,9 @@
-const cols = 18
+const table_info = {Cols: 18};
 const Columns = {
     Rubric:0,
     Title:2,
     Price:11,
+    Description:12,
     Fotos:15,
     UchCodes:16
 };
@@ -11,9 +12,6 @@ const Columns = {
 window.addEventListener("DOMContentLoaded", () => {
   setRubricsOptions();
   initLists();
-  for (let cell of document.querySelectorAll("#books td")) {
-  cell.ondblclick = () => { editable.edit(cell); };
-}
 });
 
 function addFilledLine() {
@@ -42,8 +40,9 @@ function addFilledLine() {
                 date:document.getElementById('date-id').value,
                 pages:document.getElementById('pages-id').value,
                 description:document.getElementById('description-id').value,
-                binding:getListValue("binding-id").split(' ')[0],
+                binding:getListValue("binding-id"),
                 condition:getListValue("condition-id"),
+                defects:getListValue("defects-id"),
                 format:getListValue("format-id").split(' ')[0],
                 price:document.getElementById('price-id').value,
                 isbn:getPlainISBN(),
@@ -59,23 +58,35 @@ function addFilledLine() {
                     obj.pages='';
                 }
                 isbn_str = getTrueISBN(obj.isbn);
+                let condition = "";
+                if (obj.defects.length>0) {
+                   condition = `${obj.condition}, ${obj.defects}`;
+                } else {
+                  condition = obj.condition;
+                }
                 new_date = ((day.length==2)?day : `0${day}`)+'.'+((month.length==2)?month : `0${month}`)+'.'+new_date.getFullYear();
                 addLine([obj.rubric, obj.authors, obj.name, obj.second_name, obj.publ_place, obj.publisher, obj.date, obj.pages, obj.binding, obj.format, '',
-                    obj.price, obj.description, obj.condition, new_date, pic_str, obj.sellers_code, isbn_str]);
+                    obj.price, obj.description, condition, new_date, pic_str, obj.sellers_code, isbn_str]);
 }
 
 function addLine(list = []) {
+  addRow();
   updateUchCodeList(list[Columns.UchCodes]);
   updateRubrics(list[Columns.Rubric]);
   let line = document.createElement("tr");
-  for (let i=0; i<cols;i++) { 
+  for (let i=0; i<table_info.Cols;i++) { 
   	let td = document.createElement("td");
   	if (list.length>0) {
-  		td.innerHTML = list[i];
+      setText(table_index-1, i, list[i]);
+      if (i == Columns.Description) {
+        td.innerHTML = `${list[Columns.Description].slice(0,5)}...`;
+      } else {
+  		  td.innerHTML = list[i];
+      }
   	} else {
   		td.innerHTML = "";
   	}
-  	td.ondblclick = () => { editable.edit(td); };
+  	td.ondblclick = editable.dbclick_handler;
   	line.appendChild(td);
   }
 
