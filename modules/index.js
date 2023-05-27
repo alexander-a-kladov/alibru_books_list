@@ -8,6 +8,8 @@ const Columns = {
     UchCodes:16
 };
 
+let full_price = 0;
+
 // ИНИЦИАЛИЗАЦИЯ - ДВОЙНОЙ ЩЕЛЧОК ДЛЯ РЕДАКТИРОВАНИЯ ЯЧЕЙКИ
 window.addEventListener("DOMContentLoaded", () => {
   setRubricsOptions();
@@ -43,15 +45,12 @@ function addFilledLine() {
                 binding:getListValue("binding-id"),
                 condition:getListValue("condition-id"),
                 defects:getListValue("defects-id"),
-                format:getListValue("format-id").split(' ')[0],
+                format:getListValue("format-id").split('(')[0],
                 price:document.getElementById('price-id').value,
                 isbn:getPlainISBN(),
                 sellers_code:document.getElementById('sellers-code-id').value
             };
                 pic_str = ((pic[0])?`${pic[0]}:`:"")+((pic[1])?`${pic[1]}:`:"")+((pic[2])?`${pic[2]}:`:"");
-                new_date = new Date();
-                day = `${new_date.getDate()}`;
-                month = `${new_date.getMonth()+1}`;
                 if ((obj.pages.length>0)&&(Number(obj.pages)>0)) {
                     obj.pages=`${obj.pages} с.`;
                 } else {
@@ -64,9 +63,17 @@ function addFilledLine() {
                 } else {
                   condition = obj.condition;
                 }
-                new_date = ((day.length==2)?day : `0${day}`)+'.'+((month.length==2)?month : `0${month}`)+'.'+new_date.getFullYear();
+                //new_date = ((day.length==2)?day : `0${day}`)+'.'+((month.length==2)?month : `0${month}`)+'.'+new_date.getFullYear();
+                new_date = document.getElementById('advert-date-id').value;
+                if (new_date) {
+                  new_date = `${new_date.slice(8,10)}.${new_date.slice(5,7)}.${new_date.slice(0,4)}`;
+                }
                 addLine([obj.rubric, obj.authors, obj.name, obj.second_name, obj.publ_place, obj.publisher, obj.date, obj.pages, obj.binding, obj.format, '',
                     obj.price, obj.description, condition, new_date, pic_str, obj.sellers_code, isbn_str]);
+}
+
+function showLastString(list) {
+  document.getElementById('new-book-string-id').innerHTML = list.toString();
 }
 
 function addLine(list = []) {
@@ -74,12 +81,13 @@ function addLine(list = []) {
   updateUchCodeList(list[Columns.UchCodes]);
   updateRubrics(list[Columns.Rubric]);
   let line = document.createElement("tr");
+  showLastString(list);
   for (let i=0; i<table_info.Cols;i++) { 
   	let td = document.createElement("td");
   	if (list.length>0) {
       setText(table_index-1, i, list[i]);
-      if (i == Columns.Description) {
-        td.innerHTML = `${list[Columns.Description].slice(0,5)}...`;
+      if (!full_info_show && i != Columns.Rubric && i != Columns.Fotos) {
+        td.innerHTML = `${list[i].slice(0,8)}...`;
       } else {
   		  td.innerHTML = list[i];
       }
@@ -93,5 +101,7 @@ function addLine(list = []) {
   let books = document.getElementById("books-body");
   books.appendChild(line);
   quantity = Number(document.getElementById("quantity-id").innerText)+1;
+  full_price += Number(list[Columns.Price]);
+  document.getElementById("full-price-id").innerHTML = `Сумма: <b>${full_price}</b>`;
   document.getElementById("quantity-id").innerText = `${quantity}`;
 }

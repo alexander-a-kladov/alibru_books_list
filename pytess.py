@@ -21,6 +21,15 @@ def set_isbn(file_name):
     else:
         isbn = clean_line.split("SN")[1][:13].strip()
 
+def read_name(file_name):
+    img = cv2.imread(file_name)
+    # Adding custom options
+    custom_config = r'--oem 3 --psm 6'
+    raw_str = pytesseract.image_to_string(img, config=custom_config)
+    clean_line = raw_str.replace("\n", "").replace("\t", " ").strip().lower()
+    print(clean_line)
+
+
 def append_to_isbn_file(val):
     f = open("{0}/isbn.txt".format(gpath), "a")
     if f:
@@ -41,11 +50,14 @@ class Handler(FileSystemEventHandler):
             os.rename(event.src_path, new_path)
         elif ~name.find("f.") or ~name.find("b.") or ~name.find("p."):
             if isbn:
-                new_path = path+str(isbn)+'_'+name;
+                new_path = path+str(isbn)+'_'+name
                 os.rename(event.src_path, new_path)
             else:
                 print("error isbn not set")
                 os.remove(event.src_path)
+        elif ~name.find("n."):
+            read_name(event.src_path)
+            os.remove(event.src_path)
 
     def on_deleted(self, event):
         print(event)

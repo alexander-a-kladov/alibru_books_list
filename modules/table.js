@@ -1,3 +1,5 @@
+let full_info_show = false;
+
 let editable = {
 dbclick_handler: (event) => {
         cell = event.target;
@@ -34,8 +36,10 @@ close: (evt) => { if (evt.target != editable.selected) {
 // обновить расчеты в таблице?
 // УДАЛИТЬ "РЕДАКТИРОВАНИЕ"
 setText(editable.row, editable.col, editable.selected.innerHTML);
-if (editable.col == Columns.Description) {
-    editable.selected.innerHTML = `${editable.selected.innerHTML.slice(0,5)}...`;
+if (editable.col != Columns.Rubric && editable.col != Columns.Fotos) {
+    if (!full_info_show) {
+        editable.selected.innerHTML = `${editable.selected.innerHTML.slice(0,8)}...`;
+    }
 }
 window.getSelection().removeAllRanges();
 editable.selected.contentEditable = false;

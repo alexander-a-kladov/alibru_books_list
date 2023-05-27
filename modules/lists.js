@@ -10,7 +10,7 @@ let rubric_codes = new Set();
 const bindings_list=["Бумажный", "Самодельный", "Картонный", "Твердый", "Тканевый", "Владельческий", "Полукожанный", "Составной", "Кожанный"];
 const formats_list=["Очень большой (cвыше 28 см)","Энциклопедический (25-27 см)","Увеличенный (22-24 см)",
 "Обычный (19-21 см)","Уменьшенный (11-18 см)","Миниатюрный (менее 10 см)"];
-const conditions_list=["идеальное", "отличное", "хорошее", "удовлетворительное", "плохое"];
+const conditions_list=["идеальное", "отличное", "очень хорошее", "хорошее", "удовлетворительное", "плохое"];
 const list_names={'bindings':[bindings_list, () => {selectList('bindings-id')}], 'formats':[formats_list,() => {selectList('formats-id')}],
 'conditions':[conditions_list, () => {selectList('conditions-id')}]};
 

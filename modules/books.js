@@ -1,4 +1,4 @@
-pic_url = 'http://alib.photo/gallery/ak8/';
+pic_url = 'https://alib.photo/gallery/ak8/';
 
 function saveBooks() {
     let error = false;
@@ -12,7 +12,9 @@ function saveBooks() {
                              .replaceAll('»',' ').replaceAll('\'',' ').replaceAll(' .','. ').replaceAll(' ,',', ')
                              .replaceAll(' ;','; ').replaceAll(' :',': ').replaceAll(' !','! ').replaceAll('<br>',' ').replaceAll('  ',' ').trim();
         if (c == Columns.Fotos) {
+            console.log(line);
              line = line.replaceAll(`<a href=${pic_url}`,"").replaceAll(" target=_blanc","").replaceAll("</a>","").replaceAll(">:",":");
+            console.log(line);
         }
          books += line;
          if ((line.length==0) && (c == Columns.Rubric || c == Columns.Title || c == Columns.Price)) {
@@ -43,6 +45,9 @@ function saveBooks() {
  
  function loadBooks(files) {
     let file = files[0];
+    if (document.getElementById('isbn-id').value) {
+        full_info_show = true; 
+    }
     let reader = new FileReader();
     reader.readAsText(file);
     reader.onload = function() {

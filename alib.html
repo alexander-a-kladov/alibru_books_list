@@ -13,6 +13,7 @@
 <script src="modules/books.js"></script>
 <script src="modules/table.js"></script>
 <script src="modules/lists.js"></script>
+<script src="modules/tooltip.js"></script>
 <script defer src="modules/index.js"></script>
 </head>
 <body>
@@ -25,9 +26,9 @@
 <div id="isbn-count"></div>
 <p><input type="button" id="get-book-by-isbn" onclick="getBookByISBN()" value="Данные по книге">
 <input type="text" id="isbn-id" size="23" placeholder="ISBN">
-<input type="text" id="pic1-id" size="23" placeholder="Фото обложки">
-<input type="text" id="pic2-id" size="23" placeholder="Фото обратной стороны">
-<input type="text" id="pic3-id" size="23" placeholder="Фото страниц">
+<input type="text" id="pic1-id" size="23" placeholder="Фото обложки" onmouseover="onMouseOverPic(event)">
+<input type="text" id="pic2-id" size="23" placeholder="Фото обратной стороны" onmouseover="onMouseOverPic(event)">
+<input type="text" id="pic3-id" size="23" placeholder="Фото страниц" onmouseover="onMouseOverPic(event)">
 <input type="button" id="clear-inputs-id" onclick="clearInputs()" value="Очистить данные">
 </p>
 <p>
@@ -45,14 +46,25 @@
 <textarea placeholder="Краткое содержание (Аннотация)" id="description-id" width=50px></textarea>
 </p>
 <p>
-<input type="text" id="second-name-id" size=30 placeholder="Второе название"><input type="text" id="publ-place-id" size=30 placeholder="Место издания">
-<input type="text" id="price-id" size=30 placeholder="Цена"><input type="text" id="sellers-code-id" width=50 placeholder="Уч. код продавца">
+<input type="text" id="second-name-id" size=30 placeholder="Второе название, художники, переводчики"><input type="text" id="publ-place-id" size=30 placeholder="Место издания">
+<input type="text" id="price-id" size=30 placeholder="Цена">
+<r>Дата публикации:</r>
+<input type="date" id="advert-date-id" name="date"/>
 </p>
  <select name="tipfind" id="tipfind-id" onchange="setRubricOn()">
    <OPTION VALUE="">Выберите рубрику:</OPTION>
   </select>
 <p>
 <p>
+  <div class="dropdown">
+    <button onclick='listShow("dropRubrics")' class="dropbtn" id="rubrics-id">Рубрики</button>
+    <div id="dropRubrics" class="dropdown-content">
+      <table id="rubrics">
+      <tbody id="rubrics-body">
+      </tbody>
+    </table>
+    </div>
+  </div>
 <input type="text" id="rubrics-accum-id" size=70 placeholder="Рубрики">
 <input type="button" onclick="clearRubricsAccum()" value="Очистить рубрики">
 </p>
@@ -62,15 +74,6 @@
 <input type="text" id="condition-id" size=23 placeholder="Состояние">
 <input type="text" id="defects-id" size=23 placeholder="Изъяны">
 </p>
-<div class="dropdown">
-  <button onclick='listShow("dropRubrics")' class="dropbtn" id="rubrics-id">Рубрики</button>
-  <div id="dropRubrics" class="dropdown-content">
-    <table id="rubrics">
-    <tbody id="rubrics-body">
-    </tbody>
-  </table>
-  </div>
-</div>
 <div class="dropdown">
   <button onclick='listShow("dropBindings")' class="dropbtn" id="bindings-id">Переплет</button>
   <div id="dropBindings" class="dropdown-content">
@@ -107,9 +110,15 @@
   </table>
   </div>
 </div>
+<input type="text" id="sellers-code-id" width=50 placeholder="Уч. код продавца">
 </p>
 <p><input type="button" id="new-line" onclick="addFilledLine()" value="Добавить строку"></input>
   <b id="quantity-id">0</b>
+</p>
+<p id="full-price-id"></p>
+<p id="new-book-string-id"></p>
+<details>
+<summary>Список книг</summary>
 <table id="books" class="editable">
 <!-- HEADER -->
 <thead>
@@ -138,6 +147,7 @@
 <tbody id="books-body">
 </tbody>
 </table>
+</details>
 <p>
 <div>Загрузить список</div>
 <input type="file" id="load" onchange="loadBooks(this.files)"></input>
