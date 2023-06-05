@@ -45,9 +45,9 @@ class Handler(FileSystemEventHandler):
         if ~name.find("new."):
             set_isbn(event.src_path)
             print(isbn)
-            append_to_isbn_file(isbn)
+            #append_to_isbn_file(isbn)
             new_path = path+str(isbn)+"_i."+name.split("new.")[1]
-            os.rename(event.src_path, new_path)
+            os.remove(event.src_path)
         elif ~name.find("f.") or ~name.find("b.") or ~name.find("p."):
             if isbn:
                 new_path = path+str(isbn)+'_'+name

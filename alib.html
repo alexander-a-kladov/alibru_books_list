@@ -11,6 +11,7 @@
 <script src="modules/ozon.js"></script>
 <script src="modules/alib.js"></script>
 <script src="modules/books.js"></script>
+<script src="modules/secundomer.js"></script>
 <script src="modules/table.js"></script>
 <script src="modules/lists.js"></script>
 <script src="modules/tooltip.js"></script>
@@ -39,6 +40,17 @@
 <input type="button" onclick="parseInfoChitaiGorod()" value="Обработать информацию Читай-Города">
 <input type="button" onclick="parseInfoOzon()" value="Обработать информацию Озон">
 <div><textarea placeholder="Скопируй сюда текстовую информацию о книге" id="book-info-id"></textarea></div>
+<div id="timer-id">Секундомер</div>
+<div id="book-velocity-id">Кол-во книг/час</div>
+<p>
+  <input type="button" size="50" onclick="skipWord()" value="Пропустить слово">
+  <input type="button" size="25" onclick="addToInputField()" value="Добавить текст">
+</p>
+<p>
+  <input type="button" size="25" onclick="prevInputField()" value="Пред. поле ввода">
+  <input type="button" size="25" onclick="nextInputField()" value="След. поле ввода">
+  <r id="input-field-name-id">Авторы</r>
+</p>
 <p>
 <input type="text" id="name-id" size="25" placeholder="Название книги"><input type="text" id="authors-id" size="25" placeholder="Авторы, через запятую <=3">
 <input type="text" id="publisher-id" size="25" placeholder="Издательство"><input type="text" id="date-id" size="25" placeholder="Год издания">
@@ -114,6 +126,7 @@
 </p>
 <p><input type="button" id="new-line" onclick="addFilledLine()" value="Добавить строку"></input>
   <b id="quantity-id">0</b>
+  <input type="button" id="find-book" onclick="findBookByInputData()" value="Найти книгу"></input>
 </p>
 <p id="full-price-id"></p>
 <p id="new-book-string-id"></p>
@@ -152,6 +165,7 @@
 <div>Загрузить список</div>
 <input type="file" id="load" onchange="loadBooks(this.files)"></input>
 <input type="button" id="save" onclick="saveBooks()" value="Сохранить список"></input>
+<input type="button" id="save-fbs" onclick="saveFBS()" value="Сохранить fbs.txt"></input>
 </p>
 <td align="left"> 
 </body>

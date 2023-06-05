@@ -1,6 +1,6 @@
 pic_url = 'https://alib.photo/gallery/ak8/';
 
-function saveBooks() {
+function makeBooksText() {
     let error = false;
     let errors=0;
     let count_books=0;
@@ -12,9 +12,7 @@ function saveBooks() {
                              .replaceAll('»',' ').replaceAll('\'',' ').replaceAll(' .','. ').replaceAll(' ,',', ')
                              .replaceAll(' ;','; ').replaceAll(' :',': ').replaceAll(' !','! ').replaceAll('<br>',' ').replaceAll('  ',' ').trim();
         if (c == Columns.Fotos) {
-            console.log(line);
              line = line.replaceAll(`<a href=${pic_url}`,"").replaceAll(" target=_blanc","").replaceAll("</a>","").replaceAll(">:",":");
-            console.log(line);
         }
          books += line;
          if ((line.length==0) && (c == Columns.Rubric || c == Columns.Title || c == Columns.Price)) {
@@ -31,8 +29,12 @@ function saveBooks() {
         }
         count_books += 1;
     }
+    alert(`Книг обработано ${count_books}, ошибок ${errors} (не заданы Рубрика, Название или Цена)`);
+    return books;
+}
 
-     alert(`Книг обработано ${count_books}, ошибок ${errors} (не заданы Рубрика, Название или Цена)`);
+function saveBooks() {
+     let books = makeBooksText();
      let file = new File([books], "test_save.txt", {type: "text/plain"});
      let link = document.createElement('a');
      link.download = file.name;
@@ -41,6 +43,19 @@ function saveBooks() {
      link.click();
      URL.revokeObjectURL(link.href);
  
+ }
+
+ function saveFBS() {
+    let books = makeBooksText();
+
+    let file = new File([books], "fbs.txt", {type: "text/plain;"});
+    let link = document.createElement('a');
+    link.download = file.name;
+
+    link.href = URL.createObjectURL(file);
+    console.log(link.href);
+    link.click();
+    URL.revokeObjectURL(link.href);
  }
  
  function loadBooks(files) {

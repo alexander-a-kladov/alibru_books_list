@@ -4,6 +4,7 @@ function clearInputs() {
     for (el of inputs) {
         document.getElementById(el).value = "";
     }
+    startTimer();
 }
 
 function getTitleForSearch() {
@@ -57,3 +58,23 @@ function setBinding(cover) {
         document.getElementById('binding-id').value = bindings_list[0];
     }
 }
+
+function utf8_decode(aa) {
+    var bb = '', c = 0;
+    for (var i = 0; i < aa.length; i++) {
+        c = aa.charCodeAt(i);
+        if (c > 127) {
+            if (c > 1024) {
+                if (c == 1025) {
+                    c = 1016;
+                } else if (c == 1105) {
+                    c = 1032;
+                }
+                bb += String.fromCharCode(c - 848);
+            }
+        } else {
+            bb += aa.charAt(i);
+        }
+    }
+    return bb;
+} 

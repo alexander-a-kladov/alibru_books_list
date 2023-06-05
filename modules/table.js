@@ -1,4 +1,6 @@
 let full_info_show = false;
+let table_descriptions=[];
+let table_index=0;
 
 let editable = {
 dbclick_handler: (event) => {
@@ -55,9 +57,6 @@ editable.col = undefined;
 }}
 };
 
-let table_descriptions=[];
-let table_index=0;
-
 function addRow() {
     table_descriptions[table_index] = new Array(table_info.Cols);
     table_index+=1;
@@ -74,4 +73,37 @@ function getText(index, column) {
         return table_descriptions[index][column];
     }
     return undefined;
+}
+
+function deleteRow(index) {
+    if (index >= 0 && index<table_index) {
+        table_descriptions.splice(index, 1);
+        table_index--;
+    }
+}
+
+function findBookByInputData() {
+    i = findBook(0,makeLineList());
+    if (~i) {
+        showLastString(table_descriptions[i]);
+    } else {
+        showLastString(['Не найдено']);
+    }
+}
+
+function findBook(index, list) {
+    let isFind;
+    for (let i=index;i<table_index;i++) {
+        isFind = true;
+        for (let j=0;j<table_info.Cols;j++) {
+            if (list[j] && list[j] != table_descriptions[i][j]) {
+                isFind = false;
+                break;
+            }
+        }
+        if (isFind) {
+            return i;
+        }
+    }
+    return -1;
 }

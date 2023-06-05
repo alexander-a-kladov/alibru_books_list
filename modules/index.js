@@ -1,11 +1,22 @@
 const table_info = {Cols: 18};
 const Columns = {
     Rubric:0,
+    Authors:1,
     Title:2,
+    SecondName:3,
+    Place:4,
+    Publisher:5,
+    Year:6,
+    Pages:7,
+    Binding:8,
+    Format:9,
     Price:11,
     Description:12,
+    Condition:13,
+    Date:14,
     Fotos:15,
-    UchCodes:16
+    UchCodes:16,
+    Isbn:17
 };
 
 let full_price = 0;
@@ -16,8 +27,8 @@ window.addEventListener("DOMContentLoaded", () => {
   initLists();
 });
 
-function addFilledLine() {
-      pic = [];
+function makeLineList() {
+  pic = [];
       default_names=['Обложка','Задняя обл.', 'Страницы'];
       pic.push(document.getElementById('pic1-id').value);
       pic.push(document.getElementById('pic2-id').value);
@@ -68,8 +79,13 @@ function addFilledLine() {
                 if (new_date) {
                   new_date = `${new_date.slice(8,10)}.${new_date.slice(5,7)}.${new_date.slice(0,4)}`;
                 }
-                addLine([obj.rubric, obj.authors, obj.name, obj.second_name, obj.publ_place, obj.publisher, obj.date, obj.pages, obj.binding, obj.format, '',
-                    obj.price, obj.description, condition, new_date, pic_str, obj.sellers_code, isbn_str]);
+    return [obj.rubric, obj.authors, obj.name, obj.second_name, obj.publ_place, obj.publisher, obj.date, obj.pages, obj.binding, obj.format, '',
+    obj.price, obj.description, condition, new_date, pic_str, obj.sellers_code, isbn_str];
+}
+
+function addFilledLine() {
+      stopTimer();
+      addLine(makeLineList());
 }
 
 function showLastString(list) {
@@ -104,4 +120,8 @@ function addLine(list = []) {
   full_price += Number(list[Columns.Price]);
   document.getElementById("full-price-id").innerHTML = `Сумма: <b>${full_price}</b>`;
   document.getElementById("quantity-id").innerText = `${quantity}`;
+}
+
+function deleteLine() {
+  
 }
