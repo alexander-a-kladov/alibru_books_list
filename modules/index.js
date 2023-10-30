@@ -27,12 +27,19 @@ window.addEventListener("DOMContentLoaded", () => {
   initLists();
 });
 
+window.onbeforeunload = function() {
+  return "Are you sure to close the window?"
+};
+
 function makeLineList() {
   pic = [];
-      default_names=['Обложка','Задняя обл.', 'Страницы'];
+      default_names=['Обложка','Задняя обл.', '1', '2', '3'];
       pic.push(document.getElementById('pic1-id').value);
       pic.push(document.getElementById('pic2-id').value);
       pic.push(document.getElementById('pic3-id').value);
+      pic.push(document.getElementById('pic4-id').value);
+      pic.push(document.getElementById('pic5-id').value);
+      pic_str = ""
       for (let i = 0;i < pic.length;i++) {
         if (pic[i].length>0) {
         if (pic[i].slice(7).split(':').length==1) {
@@ -40,6 +47,7 @@ function makeLineList() {
         } else {
             pic[i] = `<a href="${pic[i].slice(0,7)}${pic[i].slice(7).split(':')[0]}" target="_blanc">:${pic[i].slice(7).split(':')[1]}</a>`;
         }
+        pic_str += ((pic[i])?`${pic[i]}:`:"")
         }
       }
 
@@ -61,7 +69,6 @@ function makeLineList() {
                 isbn:getPlainISBN(),
                 sellers_code:document.getElementById('sellers-code-id').value
             };
-                pic_str = ((pic[0])?`${pic[0]}:`:"")+((pic[1])?`${pic[1]}:`:"")+((pic[2])?`${pic[2]}:`:"");
                 if ((obj.pages.length>0)&&(Number(obj.pages)>0)) {
                     obj.pages=`${obj.pages} с.`;
                 } else {

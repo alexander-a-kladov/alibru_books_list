@@ -1,0 +1,55 @@
+<head>
+<style>
+   body{
+    background-color: #3366CC; /* Цвет фона веб-страницы */
+   }
+</style>
+<script>
+function selectImage(img_id) {
+	url=document.getElementById(img_id).src
+	img=document.getElementById('img')
+	img.src=url
+}
+</script>
+<title>%title%</title>
+<meta name="description" content=%meta_name_content%/>
+<meta name="keywords" content=%meta_name_keywords%/>
+<meta property="og:site_name" content=%meta_property_site_name%>
+<meta property="og:title" content=%meta_property_title%>
+<meta property="og:description" content=%meta_property_description%>
+<meta property="og:type" content="book">
+<meta property="og:url" content=%meta_property_url%>
+</head>
+<html>
+<p>
+<h1>
+%content_name%
+</h1>
+<h2>
+%content_author%
+</h2>
+</p>
+<table>
+<tr>
+<td>
+<img id="img" src=%content_img_url% height=500px>
+</td>
+<td>
+<div>%content_second_name%</div>
+<div>%content_publisher%</div>
+<div>%content_year%</div>
+<div>%content_pages%</div>
+<div>%content_bonding%</div>
+<div>%content_format%</div>
+<div>%content_condition%</div>
+</td>
+</tr>
+<table>
+<tr>
+<td>
+<img id="img1" src=%content_img_url% width="50px" onclick=selectImage("img1")>
+</td>
+</tr>
+</table>
+</table>
+</html>

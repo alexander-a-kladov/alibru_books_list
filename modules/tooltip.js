@@ -5,7 +5,11 @@ function onMouseOverPic(event) {
   if (!target.value) return;
 
   // установим подсказку на элемент
-  let tooltip=`<img src="${target.value}" width="70%" height="70%"/>`;
+  let pic_url = target.value
+  if (pic_url.slice(7).split(':').length>1) {
+    pic_url = `${pic_url.slice(0,7)}${pic_url.slice(7).split(':')[0]}`
+  }
+  let tooltip=`<img src="${pic_url}" width="70%" height="70%"/>`;
   if (target['data-tooltip'] != tooltip) {
     target.setAttribute('data-tooltip', tooltip);
   }

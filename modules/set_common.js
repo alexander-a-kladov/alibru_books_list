@@ -1,5 +1,5 @@
 function clearInputs() {
-    inputs = ['isbn-id', 'pic1-id', 'pic2-id', 'pic3-id', 'book-info-id', 'name-id', 'authors-id', 'publisher-id', 'date-id', 'pages-id', 'description-id', 'second-name-id',
+    inputs = ['isbn-id', 'pic1-id', 'pic2-id', 'pic3-id', 'pic4-id', 'pic5-id', 'book-info-id', 'name-id', 'authors-id', 'publisher-id', 'date-id', 'pages-id', 'description-id', 'second-name-id',
 'publ-place-id', 'price-id', 'binding-id', 'format-id', 'condition-id', 'defects-id'];
     for (el of inputs) {
         document.getElementById(el).value = "";
@@ -59,22 +59,3 @@ function setBinding(cover) {
     }
 }
 
-function utf8_decode(aa) {
-    var bb = '', c = 0;
-    for (var i = 0; i < aa.length; i++) {
-        c = aa.charCodeAt(i);
-        if (c > 127) {
-            if (c > 1024) {
-                if (c == 1025) {
-                    c = 1016;
-                } else if (c == 1105) {
-                    c = 1032;
-                }
-                bb += String.fromCharCode(c - 848);
-            }
-        } else {
-            bb += aa.charAt(i);
-        }
-    }
-    return bb;
-} 

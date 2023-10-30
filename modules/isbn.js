@@ -1,18 +1,3 @@
-isbn_list = []
-isbn_index = 0
-
-function setISBN(isbn_str) {
-    let isbn = "";
-    if (isbn_str) {
-        isbn = isbn_str.trim().replaceAll('-','');
-    }
-    if (isbn.length && isFinite(isbn.slice(0,isbn.length-1))) {
-        document.getElementById('isbn-id').value = isbn;
-    } else {
-        document.getElementById('isbn-id').value = "";
-    }
-}
-
 function getTrueISBN(isbn) {
     isbn_str = isbn.trim();
     if (!isbn_str.length) {
@@ -28,30 +13,6 @@ function getTrueISBN(isbn) {
 function getPlainISBN() {
     return document.getElementById('isbn-id').value.trim().replaceAll('-','');
 }
-
-function readISBNFile(files) {
-    let file = files[0];
-  
-    let reader = new FileReader();
-  
-    reader.readAsText(file);
-  
-    reader.onload = function() {
-      isbns = reader.result.split('\n');
-      isbn_list=[];
-      for (let i=0;i<isbns.length;i++) {
-          if (isbns[i].length) {
-              isbn_list.push(isbns[i]);
-          }
-      }
-      isbn_index = 0;
-      document.getElementById('isbn-count').innerHTML = `Найдено ${isbn_list.length} книг`;
-    };
-  
-    reader.onerror = function() {
-      console.log(reader.error);
-    };
-  }
 
 function getAlibGoogleApisCategory(category, title) {
     console.log(category);

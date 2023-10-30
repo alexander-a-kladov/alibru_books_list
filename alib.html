@@ -10,6 +10,7 @@
 <script src="modules/chitai_gorod.js"></script>
 <script src="modules/ozon.js"></script>
 <script src="modules/alib.js"></script>
+<script src="modules/google.js"></script>
 <script src="modules/books.js"></script>
 <script src="modules/secundomer.js"></script>
 <script src="modules/table.js"></script>
@@ -22,20 +23,20 @@
 <summary>Заголовок сайта Alib</summary>
 <embed width=1900px height=1000px src="fbs_header.txt">
 </details>
-<div>Выберите файл c ISBN книг</div>
-<input type="file" id="isbn-file-id" onchange="readISBNFile(this.files)">
-<div id="isbn-count"></div>
 <p><input type="button" id="get-book-by-isbn" onclick="getBookByISBN()" value="Данные по книге">
 <input type="text" id="isbn-id" size="23" placeholder="ISBN">
 <input type="text" id="pic1-id" size="23" placeholder="Фото обложки" onmouseover="onMouseOverPic(event)">
 <input type="text" id="pic2-id" size="23" placeholder="Фото обратной стороны" onmouseover="onMouseOverPic(event)">
-<input type="text" id="pic3-id" size="23" placeholder="Фото страниц" onmouseover="onMouseOverPic(event)">
+<input type="text" id="pic3-id" size="23" placeholder="Фото страниц 1" onmouseover="onMouseOverPic(event)">
+<input type="text" id="pic4-id" size="23" placeholder="Фото страниц 2" onmouseover="onMouseOverPic(event)">
+<input type="text" id="pic5-id" size="23" placeholder="Фото страниц 3" onmouseover="onMouseOverPic(event)">
 <input type="button" id="clear-inputs-id" onclick="clearInputs()" value="Очистить данные">
 </p>
 <p>
 <input type="button" onclick="findOnAlib()" value="Найти на Alib">
 <input type="button" onclick="findOnChitaiGorod()" value="Найти на Читай Городе">
 <input type="button" onclick="findOnOzon()" value="Найти на Ozon">
+<input type="button" onclick="findOnGoogle()" value="Найти в Google">
 </p>
 <input type="button" onclick="parseInfoChitaiGorod()" value="Обработать информацию Читай-Города">
 <input type="button" onclick="parseInfoOzon()" value="Обработать информацию Озон">
@@ -165,7 +166,6 @@
 <div>Загрузить список</div>
 <input type="file" id="load" onchange="loadBooks(this.files)"></input>
 <input type="button" id="save" onclick="saveBooks()" value="Сохранить список"></input>
-<input type="button" id="save-fbs" onclick="saveFBS()" value="Сохранить fbs.txt"></input>
 </p>
 <td align="left"> 
 </body>

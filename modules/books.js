@@ -5,12 +5,20 @@ function makeBooksText() {
     let errors=0;
     let count_books=0;
     let books="";
+    let add_book = true;
     let count=0;
     for (let i=0;i<table_index;i++) {
+     add_book = true;
      for (let c=0;c<table_info.Cols;c++) {
          line = getText(i, c).replaceAll("\n"," ").replaceAll("\t"," ").replaceAll('"','').replaceAll('«',' ')
                              .replaceAll('»',' ').replaceAll('\'',' ').replaceAll(' .','. ').replaceAll(' ,',', ')
                              .replaceAll(' ;','; ').replaceAll(' :',': ').replaceAll(' !','! ').replaceAll('<br>',' ').replaceAll('  ',' ').trim();
+        if (c == Columns.Rubric) {
+            if (~line.split('.').indexOf('del')) {
+                add_book = false;
+                break;
+            }
+        }
         if (c == Columns.Fotos) {
              line = line.replaceAll(`<a href=${pic_url}`,"").replaceAll(" target=_blanc","").replaceAll("</a>","").replaceAll(">:",":");
         }
@@ -22,12 +30,14 @@ function makeBooksText() {
             if (c < table_info.Cols -1)
                 books += "\t";
         }
+        if (add_book) {
         books += "\n";
         if (error) {
             error = false;
             errors += 1;
         }
         count_books += 1;
+        }
     }
     alert(`Книг обработано ${count_books}, ошибок ${errors} (не заданы Рубрика, Название или Цена)`);
     return books;
@@ -43,19 +53,6 @@ function saveBooks() {
      link.click();
      URL.revokeObjectURL(link.href);
  
- }
-
- function saveFBS() {
-    let books = makeBooksText();
-
-    let file = new File([books], "fbs.txt", {type: "text/plain;"});
-    let link = document.createElement('a');
-    link.download = file.name;
-
-    link.href = URL.createObjectURL(file);
-    console.log(link.href);
-    link.click();
-    URL.revokeObjectURL(link.href);
  }
  
  function loadBooks(files) {
