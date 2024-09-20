@@ -1,21 +1,8 @@
 alib_win = null;
-input_fields = ['authors-id', 'name-id', 'publ-place-id', 'publisher-id', 'date-id', 'pages-id', 'binding-id', 'format-id', 'isbn-id', 'price-id', 'description-id'];
-input_field_names = ['Авторы', 'Название', 'Место изд.', 'Издательство', 'Год издания', 'Кол-во страниц', 'Переплет', 'Формат', 'ISBN', 'Цена', 'Описание'];
+input_fields = ['authors-id', 'name-id', 'second-name-id', 'publ-place-id', 'publisher-id', 'date-id', 'pages-id', 'binding-id', 'format-id', 'isbn-id', 'price-id', 'description-id'];
+input_field_names = ['Авторы', 'Название', 'Второе название', 'Место изд.', 'Издательство', 'Год издания', 'Кол-во страниц', 'Переплет', 'Формат', 'ISBN', 'Цена', 'Описание'];
 field_index = 0;
 
-// const undoStack = {
-// _stack: [],
-// _top: 0,
-// function push(field_id, field_text, new_text) {
-//   _stack[_top] = {id: field_id, text: field_text, new: new_text};
-//   _top+=1; 
-// },
-// function pop() {
-//     if (_top>0) {
-
-//     }
-// }
-// };
 
 function findOnAlib() {
     isbn = document.getElementById("isbn-id").value;
@@ -49,7 +36,7 @@ function fixTextFields(field_id, text) {
         }
     }
     if (field_id == 'publisher-id') {
-        return text;
+        return text.replaceAll('.','');
     }
     if (field_id == 'date-id') {
         return text.replaceAll('г','').replaceAll('.','');
@@ -77,6 +64,11 @@ function addToInputField() {
         input.value = text;
         document.getElementById('book-info-id').value = descr.slice(stop+1);
     }
+}
+
+function initInputFields() {
+    field_index = 0
+    document.getElementById('input-field-name-id').innerHTML = input_field_names[field_index];
 }
 
 function nextInputField() {

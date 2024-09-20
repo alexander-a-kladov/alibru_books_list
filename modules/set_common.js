@@ -4,6 +4,7 @@ function clearInputs() {
     for (el of inputs) {
         document.getElementById(el).value = "";
     }
+    initInputFields();
     startTimer();
 }
 

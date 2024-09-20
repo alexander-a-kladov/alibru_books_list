@@ -52,22 +52,22 @@ function makeLineList() {
       }
 
      let obj = {
-                rubric:document.getElementById('rubrics-accum-id').value,
-                authors:document.getElementById('authors-id').value,
-                name:document.getElementById('name-id').value,
-                second_name:document.getElementById('second-name-id').value,
-                publ_place:document.getElementById('publ-place-id').value,
-                publisher:document.getElementById('publisher-id').value,
-                date:document.getElementById('date-id').value,
-                pages:document.getElementById('pages-id').value,
-                description:document.getElementById('description-id').value,
+                rubric:document.getElementById('rubrics-accum-id').value.trim(),
+                authors:document.getElementById('authors-id').value.trim(),
+                name:document.getElementById('name-id').value.trim(),
+                second_name:document.getElementById('second-name-id').value.trim(),
+                publ_place:document.getElementById('publ-place-id').value.trim(),
+                publisher:document.getElementById('publisher-id').value.trim(),
+                date:document.getElementById('date-id').value.trim(),
+                pages:document.getElementById('pages-id').value.trim(),
+                description:document.getElementById('description-id').value.trim(),
                 binding:getListValue("binding-id"),
                 condition:getListValue("condition-id"),
                 defects:getListValue("defects-id"),
                 format:getListValue("format-id").split('(')[0],
-                price:document.getElementById('price-id').value,
+                price:document.getElementById('price-id').value.trim(),
                 isbn:getPlainISBN(),
-                sellers_code:document.getElementById('sellers-code-id').value
+                sellers_code:document.getElementById('sellers-code-id').value.trim()
             };
                 if ((obj.pages.length>0)&&(Number(obj.pages)>0)) {
                     obj.pages=`${obj.pages} с.`;
