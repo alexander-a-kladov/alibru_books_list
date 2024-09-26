@@ -91,8 +91,13 @@ function makeLineList() {
 }
 
 function addFilledLine() {
-      stopTimer();
-      addLine(makeLineList());
+      let book_list = makeLineList()
+      if (findBook(0, book_list)==-1) {
+        stopTimer();
+        addLine(book_list);
+      } else {
+        alert("Такая книга уже есть в списке, если требуется ее добавить измените что-то в описании")
+      }
 }
 
 function showLastString(list) {
