@@ -14,6 +14,8 @@ if __name__ == "__main__":
             count = 0
             for line in f.readlines():
                 token_date=line.split('\t')[14]
+                if line[:5]=='prod.':
+                    quan_max += 1
                 file_time=""
                 if len(token_date)>0:
                     token_date=token_date.split('.')
