@@ -19,7 +19,10 @@ if __name__ == "__main__":
                 file_time=""
                 if len(token_date)>0:
                     token_date=token_date.split('.')
-                    file_time=datetime(int(token_date[2]),int(token_date[1]),int(token_date[0]))
+                    try:
+                        file_time=datetime(int(token_date[2]),int(token_date[1]),int(token_date[0]))
+                    except:
+                        file_time=""
                 if file_time=="" or file_time<=today:
                     count += 1
                     print(line,end="")
