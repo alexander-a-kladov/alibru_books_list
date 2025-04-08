@@ -15,7 +15,7 @@ if __name__ == "__main__":
             for line in f.readlines():
                 token_date=line.split('\t')[14]
                 if line[:5]=='prod.':
-                    quan_max += 1
+                    quan_max += 1 # want to have such line in result output, but don't count it
                 file_time=""
                 if len(token_date)>0:
                     token_date=token_date.split('.')
@@ -27,7 +27,7 @@ if __name__ == "__main__":
                     count += 1
                     print(line,end="")
                 elif file_time > today:
-                    break
+                    continue
                 if count >= quan_max:
                     break
             f.close()
