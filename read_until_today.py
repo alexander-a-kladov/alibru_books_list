@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 import sys
-from datetime import datetime
+from datetime import datetime, timedelta
 
 if __name__ == "__main__":
     if len(sys.argv)>1:
@@ -9,6 +9,7 @@ if __name__ == "__main__":
         else:
             quan_max = 250
         today = datetime.now()
+        tomorrow = today + timedelta(days=1)
         f = open(sys.argv[1])
         if f:
             count = 0
@@ -23,10 +24,10 @@ if __name__ == "__main__":
                         file_time=datetime(int(token_date[2]),int(token_date[1]),int(token_date[0]))
                     except:
                         file_time=""
-                if file_time=="" or file_time<=today:
+                if file_time=="" or file_time<=tomorrow:
                     count += 1
                     print(line,end="")
-                elif file_time > today:
+                elif file_time > tomorrow:
                     continue
                 if count >= quan_max:
                     break
